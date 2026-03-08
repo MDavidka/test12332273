@@ -1,56 +1,132 @@
+import type { Product, CartItem } from './types';
+
+export const CART_STORAGE_KEY = 'flower_shop_cart';
+
 /**
- * Smoothly scrolls the page to the target element by its ID.
- * 
- * @param targetId - The ID of the HTML element to scroll to (without the '#' prefix).
- * @param offset - Optional offset in pixels (useful for sticky headers).
+ * Formats a number as Hungarian Forint (HUF)
+ */
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('hu-HU', {
+    style: 'currency',
+    currency: 'HUF',
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+/**
+ * Retrieves the cart from local storage
+ */
+export function getCart(): CartItem[] {
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error('Failed to parse cart from local storage:', error);
+    return [];
+  }
+}
+
+/**
+ * Saves the cart to local storage and dispatches a custom event
+ * so that UI components (like the header cart count) can update reactively.
+ */
+export function saveCart(cart: CartItem[]): void {
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: cart }));
+  } catch (error) {
+    console.error('Failed to save cart to local storage:', error);
+  }
+}
+
+/**
+ * Adds a product to the cart or increments its quantity if it already exists
+ */
+export function addToCart(product: Product, quantity: number = 1): void {
+  const cart = getCart();
+  const existingItemIndex = cart.findIndex(item => item.product.id === product.id);
+
+  if (existingItemIndex >= 0) {
+    cart[existingItemIndex].quantity += quantity;
+  } else {
+    cart.push({ product, quantity });
+  }
+
+  saveCart(cart);
+  
+  // Dispatch a specific event for UI feedback (e.g., opening the cart or showing a toast)
+  window.dispatchEvent(new CustomEvent('itemAddedToCart', { detail: { product, quantity } }));
+}
+
+/**
+ * Removes a product entirely from the cart
+ */
+export function removeFromCart(productId: string): void {
+  const cart = getCart();
+  const updatedCart = cart.filter(item => item.product.id !== productId);
+  saveCart(updatedCart);
+}
+
+/**
+ * Updates the quantity of a specific product in the cart
+ */
+export function updateCartQuantity(productId: string, quantity: number): void {
+  if (quantity <= 0) {
+    removeFromCart(productId);
+    return;
+  }
+  
+  const cart = getCart();
+  const item = cart.find(item => item.product.id === productId);
+  
+  if (item) {
+    item.quantity = quantity;
+    saveCart(cart);
+  }
+}
+
+/**
+ * Clears all items from the cart
+ */
+export function clearCart(): void {
+  saveCart([]);
+}
+
+/**
+ * Calculates the total price of all items in the cart
+ */
+export function getCartTotal(): number {
+  const cart = getCart();
+  return cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+}
+
+/**
+ * Calculates the total number of items in the cart
+ */
+export function getCartItemCount(): number {
+  const cart = getCart();
+  return cart.reduce((count, item) => count + item.quantity, 0);
+}
+
+/**
+ * Smooth scrolls to a specific element by ID
+ * @param targetId The ID of the element to scroll to
+ * @param offset Optional offset (e.g., for fixed headers)
  */
 export function smoothScrollTo(targetId: string, offset: number = 0): void {
   const target = document.getElementById(targetId);
-  if (!target) {
-    console.warn(`Element with id "${targetId}" not found.`);
-    return;
+  if (target) {
+    const elementPosition = target.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.scrollY - offset;
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
   }
-
-  const elementPosition = target.getBoundingClientRect().top;
-  const offsetPosition = elementPosition + window.scrollY - offset;
-
-  window.scrollTo({
-    top: offsetPosition,
-    behavior: 'smooth'
-  });
 }
 
 /**
- * Creates an HTML element with the specified tag, classes, and inner HTML.
- * 
- * @param tag - The HTML tag name (e.g., 'div', 'span', 'section').
- * @param className - A string of CSS classes to apply to the element.
- * @param innerHTML - Optional HTML string to set as the element's content.
- * @returns The created HTML element typed as T.
- */
-export function createElement<T extends HTMLElement>(
-  tag: string,
-  className: string = '',
-  innerHTML: string = ''
-): T {
-  const el = document.createElement(tag) as T;
-  if (className) {
-    el.className = className;
-  }
-  if (innerHTML) {
-    el.innerHTML = innerHTML;
-  }
-  return el;
-}
-
-/**
- * Creates a debounced function that delays invoking the provided function until after 
- * `wait` milliseconds have elapsed since the last time the debounced function was invoked.
- * Useful for window resize or scroll events.
- * 
- * @param func - The function to debounce.
- * @param wait - The number of milliseconds to delay.
- * @returns A new debounced function.
+ * Debounces a function call
  */
 export function debounce<T extends (...args: any[]) => void>(
   func: T,
@@ -58,43 +134,8 @@ export function debounce<T extends (...args: any[]) => void>(
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
   
-  return function (...args: Parameters<T>) {
-    if (timeout !== null) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(() => {
-      func(...args);
-    }, wait);
+  return function(...args: Parameters<T>) {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
   };
-}
-
-/**
- * Sets up an IntersectionObserver to trigger animations or lazy loading when elements enter the viewport.
- * 
- * @param elements - An array or NodeList of elements to observe.
- * @param onIntersect - Callback function executed when an element intersects.
- * @param options - Optional IntersectionObserver configuration.
- */
-export function observeIntersection(
-  elements: Element[] | NodeListOf<Element>,
-  onIntersect: (entry: IntersectionObserverEntry, observer: IntersectionObserver) => void,
-  options: IntersectionObserverInit = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-): void {
-  if (!('IntersectionObserver' in window)) {
-    // Fallback for older browsers: trigger immediately
-    elements.forEach(el => {
-      onIntersect({ target: el, isIntersecting: true } as IntersectionObserverEntry, {} as IntersectionObserver);
-    });
-    return;
-  }
-
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        onIntersect(entry, obs);
-      }
-    });
-  }, options);
-
-  elements.forEach(el => observer.observe(el));
 }

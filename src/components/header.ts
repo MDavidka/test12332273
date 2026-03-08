@@ -1,124 +1,117 @@
 import { StoreInfo, NavItem } from '../types';
-import { createEl } from '../utils';
 
-/**
- * Renders the main navigation header for the website.
- * Includes a responsive mobile menu and scroll-based styling.
- * 
- * @param storeInfo - Information about the store (name, etc.)
- * @param navItems - Array of navigation links
- * @returns The constructed header HTMLElement
- */
 export function Header(storeInfo: StoreInfo, navItems: NavItem[]): HTMLElement {
-  // Create the main header element
-  const header = createEl('header', {
-    className: 'fixed w-full top-0 z-50 bg-[var(--color-bg)]/95 backdrop-blur-md border-b border-[var(--color-border)] transition-all duration-300'
-  });
+  const header = document.createElement('header');
+  // Fixed header with transition for scroll effects
+  header.className = 'fixed w-full top-0 z-50 transition-all duration-300 bg-[var(--color-surface)] shadow-[var(--shadow-sm)]';
 
-  // Container for max-width and padding
-  const container = createEl('div', {
-    className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'
-  });
+  header.innerHTML = `
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-md p-1">
+          <!-- Heart/Leaf hybrid icon fitting for a flower delivery shop -->
+          <svg class="w-8 h-8 text-[var(--color-primary)] group-hover:text-[var(--color-secondary)] transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+          </svg>
+          <span class="font-heading font-bold text-2xl text-[var(--color-text)] tracking-tight group-hover:text-[var(--color-primary)] transition-colors duration-300">
+            ${storeInfo.name}
+          </span>
+        </a>
 
-  // Flex container for the nav items
-  const nav = createEl('nav', {
-    className: 'flex justify-between items-center h-20'
-  });
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-8">
+          ${navItems.map(item => `
+            <a href="${item.href}" class="text-[var(--color-text)] hover:text-[var(--color-primary)] font-medium transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-[var(--color-primary)] after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-sm">
+              ${item.label}
+            </a>
+          `).join('')}
+        </nav>
 
-  // 1. Logo & Brand Name
-  const logoContainer = createEl('a', {
-    href: '#',
-    className: 'flex items-center gap-3 group'
-  });
-  
-  // Leaf icon for the plant store
-  logoContainer.innerHTML = `
-    <div class="bg-[var(--color-primary)]/10 p-2 rounded-[var(--radius-md)] group-hover:bg-[var(--color-primary)]/20 transition-colors duration-300">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--color-primary)] group-hover:scale-110 transition-transform duration-300">
-        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
-        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
-      </svg>
+        <!-- Actions (Cart & Mobile Menu Toggle) -->
+        <div class="flex items-center gap-2 sm:gap-4">
+          
+          <!-- Shopping Cart Button -->
+          <button id="cart-toggle" class="relative p-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-full group" aria-label="Kosár megnyitása">
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            <span id="cart-badge" class="absolute top-0 right-0 bg-[var(--color-accent)] text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center transform translate-x-1/4 -translate-y-1/4 border-2 border-[var(--color-surface)] shadow-sm transition-transform duration-300">
+              0
+            </span>
+          </button>
+
+          <!-- Mobile Menu Toggle -->
+          <button id="mobile-menu-toggle" class="md:hidden p-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-md" aria-label="Menü megnyitása">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
-    <span class="font-heading font-bold text-2xl text-[var(--color-text)] tracking-tight">${storeInfo.name}</span>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-[var(--color-surface)] border-t border-[var(--color-border)] shadow-[var(--shadow-md)] absolute w-full left-0 top-20 origin-top transition-all duration-300">
+      <nav class="flex flex-col px-4 py-4 space-y-2">
+        ${navItems.map(item => `
+          <a href="${item.href}" class="mobile-nav-link block px-4 py-3 rounded-[var(--radius-md)] text-[var(--color-text)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/5 font-medium text-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+            ${item.label}
+          </a>
+        `).join('')}
+      </nav>
+    </div>
   `;
 
-  // 2. Desktop Navigation
-  const desktopNav = createEl('div', {
-    className: 'hidden md:flex items-center gap-8'
-  });
+  // --- Event Listeners ---
 
-  navItems.forEach(item => {
-    const link = createEl('a', {
-      href: item.href,
-      className: 'text-[var(--color-text)] hover:text-[var(--color-primary)] font-medium transition-colors text-sm uppercase tracking-wider relative after:content-[""] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-[var(--color-primary)] after:transition-all hover:after:w-full'
-    });
-    link.textContent = item.label;
-    desktopNav.appendChild(link);
-  });
-
-  // 3. Mobile Menu Toggle Button
-  const mobileBtn = createEl('button', {
-    className: 'md:hidden p-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors rounded-[var(--radius-md)] hover:bg-[var(--color-border)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]',
-    ariaLabel: 'Toggle menu'
-  });
-  
-  // Hamburger icon
-  mobileBtn.innerHTML = `
-    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  `;
-
-  // 4. Mobile Navigation Menu (Hidden by default)
-  const mobileMenu = createEl('div', {
-    className: 'md:hidden hidden bg-[var(--color-bg)] border-t border-[var(--color-border)] absolute top-full left-0 w-full shadow-lg origin-top transition-all duration-300'
-  });
-  
-  const mobileNavList = createEl('div', {
-    className: 'flex flex-col px-4 py-6 space-y-4'
-  });
-
-  navItems.forEach(item => {
-    const link = createEl('a', {
-      href: item.href,
-      className: 'text-[var(--color-text)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/5 px-4 py-3 rounded-[var(--radius-md)] font-medium transition-colors text-lg block'
-    });
-    link.textContent = item.label;
-    
-    // Close mobile menu when a link is clicked
-    link.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden');
-    });
-    
-    mobileNavList.appendChild(link);
-  });
-
-  mobileMenu.appendChild(mobileNavList);
+  const mobileToggle = header.querySelector('#mobile-menu-toggle');
+  const mobileMenu = header.querySelector('#mobile-menu');
+  const mobileLinks = header.querySelectorAll('.mobile-nav-link');
+  const cartToggle = header.querySelector('#cart-toggle');
 
   // Toggle mobile menu visibility
-  mobileBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
+  mobileToggle?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
   });
 
-  // Add scroll effect to header (shadow on scroll)
+  // Close mobile menu when a link is clicked
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+    });
+  });
+
+  // Dispatch custom event to open the cart sidebar/modal
+  cartToggle?.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('toggle-cart'));
+  });
+
+  // Listen for global cart updates to animate and update the badge count
+  window.addEventListener('cart-updated', ((e: CustomEvent) => {
+    const badge = header.querySelector('#cart-badge');
+    if (badge && e.detail && typeof e.detail.count === 'number') {
+      badge.textContent = e.detail.count.toString();
+      
+      // Pop animation on update
+      badge.classList.add('scale-125');
+      setTimeout(() => {
+        badge.classList.remove('scale-125');
+      }, 200);
+    }
+  }) as EventListener);
+
+  // Add shadow on scroll for better depth perception
   window.addEventListener('scroll', () => {
     if (window.scrollY > 10) {
-      header.classList.add('shadow-sm');
-      header.classList.replace('bg-[var(--color-bg)]/95', 'bg-[var(--color-bg)]/98');
+      header.classList.add('shadow-[var(--shadow-md)]');
+      header.classList.remove('shadow-[var(--shadow-sm)]');
     } else {
-      header.classList.remove('shadow-sm');
-      header.classList.replace('bg-[var(--color-bg)]/98', 'bg-[var(--color-bg)]/95');
+      header.classList.add('shadow-[var(--shadow-sm)]');
+      header.classList.remove('shadow-[var(--shadow-md)]');
     }
   });
-
-  // Assemble the header
-  nav.appendChild(logoContainer);
-  nav.appendChild(desktopNav);
-  nav.appendChild(mobileBtn);
-  
-  container.appendChild(nav);
-  header.appendChild(container);
-  header.appendChild(mobileMenu);
 
   return header;
 }

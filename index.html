@@ -1,48 +1,24 @@
 <!DOCTYPE html>
-<html lang="hu" class="scroll-smooth">
+<html lang="hu">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zöld Oázis | Különleges Szobanövények és Kiegészítők</title>
-    <meta name="description" content="Látogasson el növényboltunkba, ahol különleges szobanövényekkel, stílusos kiegészítőkkel és szakértő ápolási tanácsadással várjuk!" />
+    <title>Virágműhely - Prémium Virágküldés és Kiszállítás</title>
+    <meta name="description" content="Rendeljen gyönyörű, friss virágcsokrokat és asztaldíszeket online. Gyors és megbízható virágküldés szeretteinek, pontos kiszállítással." />
     
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Playfair Display (Heading) & Inter (Body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind CDN Configuration to match style.css tokens -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: 'var(--color-primary)',
-              'primary-hover': 'var(--color-primary-hover)',
-              secondary: 'var(--color-secondary)',
-              'secondary-hover': 'var(--color-secondary-hover)',
-              accent: 'var(--color-accent)',
-              bg: 'var(--color-bg)',
-              surface: 'var(--color-surface)',
-              text: 'var(--color-text)',
-              muted: 'var(--color-muted)',
-              border: 'var(--color-border)',
-            },
-            fontFamily: {
-              sans: ['var(--font-body)'],
-              heading: ['var(--font-heading)'],
-            }
-          }
-        }
-      }
-    </script>
   </head>
-  <body class="bg-[var(--color-bg)] text-[var(--color-text)] antialiased selection:bg-[var(--color-primary)] selection:text-white min-h-screen flex flex-col">
-    <div id="app" class="flex-grow flex flex-col w-full"></div>
+  <body class="antialiased bg-[#fdfbf7] text-[#2c3e2d] min-h-screen flex flex-col">
+    <!-- App Root -->
+    <div id="app" class="flex flex-col min-h-screen w-full relative overflow-x-hidden"></div>
+    
+    <!-- Vite Entry Point -->
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

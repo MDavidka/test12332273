@@ -5,11 +5,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
+    target: 'esnext',
   },
   server: {
     port: 3000,
@@ -19,5 +15,5 @@ export default defineConfig({
   preview: {
     port: 8080,
     host: true,
-  },
+  }
 });
