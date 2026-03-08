@@ -1,80 +1,55 @@
 /**
- * Shared TypeScript interfaces and type definitions for the Flower Shop application.
+ * Represents the specific care and botanical properties of a flower.
  */
-
-export interface ComponentProps {
-  /** Optional CSS classes to append to the component's root element */
-  className?: string;
-  /** Optional ID for the component's root element */
-  id?: string;
+export interface FlowerProperties {
+  /** The season(s) when the flower typically blooms (e.g., "Tavasz", "Nyár") */
+  bloomingSeason: string;
+  /** The amount of sunlight required (e.g., "Teljes napfény", "Félárnyék") */
+  lightRequirement: string;
+  /** The amount of water required (e.g., "Magas", "Közepes", "Alacsony") */
+  waterRequirement: string;
+  /** The level of experience needed to care for the plant */
+  difficulty: 'Kezdő' | 'Középhaladó' | 'Haladó' | string;
+  /** The symbolic meaning of the flower (e.g., "Szerelem", "Tisztaság") */
+  symbolism?: string;
 }
 
-export type ProductCategory = 'csokrok' | 'dobozos' | 'cserepes' | 'kiegeszitok';
-
-export interface Product {
+/**
+ * Represents a single flower entry in the catalog.
+ */
+export interface Flower {
+  /** Unique identifier for the flower */
   id: string;
+  /** Common name of the flower in Hungarian (e.g., "Rózsa") */
   name: string;
+  /** Latin/Scientific name of the flower (e.g., "Rosa") */
+  scientificName: string;
+  /** A short description of the flower */
   description: string;
-  price: number;
+  /** URL path to the image representing the flower */
   imageUrl: string;
-  category: ProductCategory;
-  /** Indicates if the product is currently in stock and available for delivery */
-  isAvailable: boolean;
-  /** Optional tags for filtering (e.g., 'valentin-nap', 'szuletesnap') */
-  tags?: string[];
+  /** Detailed properties and care instructions */
+  properties: FlowerProperties;
 }
 
-export interface CartItem {
-  product: Product;
-  quantity: number;
+/**
+ * Represents a navigation link item in the header/footer.
+ */
+export interface NavItem {
+  /** The display text for the link */
+  label: string;
+  /** The URL or anchor link (e.g., "#catalog") */
+  href: string;
 }
 
-export interface DeliveryDetails {
-  recipientName: string;
-  recipientPhone: string;
-  city: string;
-  zipCode: string;
-  streetAddress: string;
-  /** Requested date for delivery (YYYY-MM-DD format) */
-  deliveryDate: string;
-  /** Optional preferred time window (e.g., 'Délelőtt 8-12', 'Délután 12-16') */
-  preferredTime?: string;
-  /** Optional personal message to be included on a greeting card */
-  personalMessage?: string;
-  /** Any special instructions for the courier */
-  specialInstructions?: string;
-}
-
-export interface CustomerDetails {
-  senderName: string;
-  senderEmail: string;
-  senderPhone: string;
-  /** If true, billing address is the same as delivery address */
-  billingSameAsDelivery: boolean;
-  billingCity?: string;
-  billingZipCode?: string;
-  billingStreetAddress?: string;
-}
-
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-
-export interface Order {
-  id: string;
-  items: CartItem[];
-  subtotal: number;
-  deliveryFee: number;
-  totalAmount: number;
-  customerDetails: CustomerDetails;
-  deliveryDetails: DeliveryDetails;
-  status: OrderStatus;
-  createdAt: string;
-}
-
-export interface StoreConfig {
-  name: string;
-  email: string;
-  phone: string;
-  currency: string;
-  deliveryFee: number;
-  freeDeliveryThreshold: number;
+/**
+ * Global configuration for the website.
+ */
+export interface SiteConfig {
+  /** The main title of the website */
+  title: string;
+  /** A short description or tagline for the website */
+  description: string;
+  /** Array of navigation items for the main menu */
+  navItems: NavItem[];
 }

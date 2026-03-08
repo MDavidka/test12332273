@@ -1,117 +1,122 @@
-import { StoreInfo, NavItem } from '../types';
+import { siteConfig } from '../utils';
 
-export function Header(storeInfo: StoreInfo, navItems: NavItem[]): HTMLElement {
+/**
+ * Renders the main header and navigation for the website.
+ * Includes a responsive mobile menu with toggle functionality.
+ * 
+ * @param container The DOM element to append the header to.
+ */
+export function renderHeader(container: HTMLElement): void {
+  // Create the main header element
   const header = document.createElement('header');
-  // Fixed header with transition for scroll effects
-  header.className = 'fixed w-full top-0 z-50 transition-all duration-300 bg-[var(--color-surface)] shadow-[var(--shadow-sm)]';
+  // Apply Tailwind classes and custom design tokens (bg-surface)
+  header.className = 'sticky top-0 z-50 w-full border-b border-gray-200 dark:border-slate-700 bg-surface/95 backdrop-blur-sm transition-colors duration-300 shadow-sm';
 
+  // Generate desktop navigation links
+  const navItemsHtml = siteConfig.navItems.map(item => `
+    <a href="${item.href}" class="text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors duration-200">
+      ${item.label}
+    </a>
+  `).join('');
+
+  // Generate mobile navigation links
+  const mobileNavItemsHtml = siteConfig.navItems.map(item => `
+    <a href="${item.href}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors duration-200 mobile-link">
+      ${item.label}
+    </a>
+  `).join('');
+
+  // Set the inner HTML structure
   header.innerHTML = `
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-20">
         
-        <!-- Logo -->
-        <a href="#" class="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-md p-1">
-          <!-- Heart/Leaf hybrid icon fitting for a flower delivery shop -->
-          <svg class="w-8 h-8 text-[var(--color-primary)] group-hover:text-[var(--color-secondary)] transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-          </svg>
-          <span class="font-heading font-bold text-2xl text-[var(--color-text)] tracking-tight group-hover:text-[var(--color-primary)] transition-colors duration-300">
-            ${storeInfo.name}
-          </span>
-        </a>
+        <!-- Logo & Brand -->
+        <div class="flex-shrink-0 flex items-center">
+          <a href="#home" class="text-3xl font-heading font-bold text-primary flex items-center gap-2 group">
+            <!-- Leaf Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-300 group-hover:-rotate-12">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+            </svg>
+            ${siteConfig.title}
+          </a>
+        </div>
 
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center gap-8">
-          ${navItems.map(item => `
-            <a href="${item.href}" class="text-[var(--color-text)] hover:text-[var(--color-primary)] font-medium transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-[var(--color-primary)] after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-sm">
-              ${item.label}
-            </a>
-          `).join('')}
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex space-x-8 items-center">
+          ${navItemsHtml}
+          <a href="#catalog" class="btn-primary text-sm px-5 py-2.5">
+            Katalógus megtekintése
+          </a>
         </nav>
 
-        <!-- Actions (Cart & Mobile Menu Toggle) -->
-        <div class="flex items-center gap-2 sm:gap-4">
-          
-          <!-- Shopping Cart Button -->
-          <button id="cart-toggle" class="relative p-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-full group" aria-label="Kosár megnyitása">
-            <svg class="w-6 h-6 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+        <!-- Mobile Menu Toggle Button -->
+        <div class="flex items-center md:hidden">
+          <button type="button" id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-colors" aria-expanded="false">
+            <span class="sr-only">Főmenü megnyitása</span>
+            <!-- Hamburger Icon -->
+            <svg id="icon-menu" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-            <span id="cart-badge" class="absolute top-0 right-0 bg-[var(--color-accent)] text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center transform translate-x-1/4 -translate-y-1/4 border-2 border-[var(--color-surface)] shadow-sm transition-transform duration-300">
-              0
-            </span>
-          </button>
-
-          <!-- Mobile Menu Toggle -->
-          <button id="mobile-menu-toggle" class="md:hidden p-2 text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] rounded-md" aria-label="Menü megnyitása">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            <!-- Close Icon -->
+            <svg id="icon-close" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Mobile Navigation Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-[var(--color-surface)] border-t border-[var(--color-border)] shadow-[var(--shadow-md)] absolute w-full left-0 top-20 origin-top transition-all duration-300">
-      <nav class="flex flex-col px-4 py-4 space-y-2">
-        ${navItems.map(item => `
-          <a href="${item.href}" class="mobile-nav-link block px-4 py-3 rounded-[var(--radius-md)] text-[var(--color-text)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/5 font-medium text-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
-            ${item.label}
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-slate-700 bg-surface shadow-lg absolute w-full">
+      <div class="px-4 pt-2 pb-4 space-y-1 sm:px-6">
+        ${mobileNavItemsHtml}
+        <div class="pt-2">
+          <a href="#catalog" class="btn-primary w-full text-center text-sm px-5 py-2.5 mobile-link">
+            Katalógus megtekintése
           </a>
-        `).join('')}
-      </nav>
+        </div>
+      </div>
     </div>
   `;
 
-  // --- Event Listeners ---
+  // Append to the DOM
+  container.appendChild(header);
 
-  const mobileToggle = header.querySelector('#mobile-menu-toggle');
+  // Attach event listeners for mobile menu functionality
+  const mobileBtn = header.querySelector('#mobile-menu-btn');
   const mobileMenu = header.querySelector('#mobile-menu');
-  const mobileLinks = header.querySelectorAll('.mobile-nav-link');
-  const cartToggle = header.querySelector('#cart-toggle');
+  const iconMenu = header.querySelector('#icon-menu');
+  const iconClose = header.querySelector('#icon-close');
+  const mobileLinks = header.querySelectorAll('.mobile-link');
 
-  // Toggle mobile menu visibility
-  mobileToggle?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
-  });
+  if (mobileBtn && mobileMenu && iconMenu && iconClose) {
+    let isMenuOpen = false;
 
-  // Close mobile menu when a link is clicked
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu?.classList.add('hidden');
+    const toggleMenu = () => {
+      isMenuOpen = !isMenuOpen;
+      if (isMenuOpen) {
+        mobileMenu.classList.remove('hidden');
+        iconMenu.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+        mobileBtn.setAttribute('aria-expanded', 'true');
+      } else {
+        mobileMenu.classList.add('hidden');
+        iconMenu.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+        mobileBtn.setAttribute('aria-expanded', 'false');
+      }
+    };
+
+    // Toggle menu on button click
+    mobileBtn.addEventListener('click', toggleMenu);
+
+    // Close menu when a link is clicked
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (isMenuOpen) toggleMenu();
+      });
     });
-  });
-
-  // Dispatch custom event to open the cart sidebar/modal
-  cartToggle?.addEventListener('click', () => {
-    window.dispatchEvent(new CustomEvent('toggle-cart'));
-  });
-
-  // Listen for global cart updates to animate and update the badge count
-  window.addEventListener('cart-updated', ((e: CustomEvent) => {
-    const badge = header.querySelector('#cart-badge');
-    if (badge && e.detail && typeof e.detail.count === 'number') {
-      badge.textContent = e.detail.count.toString();
-      
-      // Pop animation on update
-      badge.classList.add('scale-125');
-      setTimeout(() => {
-        badge.classList.remove('scale-125');
-      }, 200);
-    }
-  }) as EventListener);
-
-  // Add shadow on scroll for better depth perception
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 10) {
-      header.classList.add('shadow-[var(--shadow-md)]');
-      header.classList.remove('shadow-[var(--shadow-sm)]');
-    } else {
-      header.classList.add('shadow-[var(--shadow-sm)]');
-      header.classList.remove('shadow-[var(--shadow-md)]');
-    }
-  });
-
-  return header;
+  }
 }

@@ -1,108 +1,84 @@
-# Bloom & Deliver - Online Flower Shop
+# 🌸 Virág Katalógus (Flower Catalog)
 
-A modern, lightning-fast, and responsive single-page application (SPA) for an online flower delivery service. Built with **Vite**, **Vanilla TypeScript**, and **Tailwind CSS**.
+A modern, responsive, and visually appealing web catalog showcasing various flowers and their botanical properties. Built with **Vite**, **Vanilla TypeScript**, and **Tailwind CSS**.
 
-## 🚀 Tech Stack
+## ✨ Features
 
-- **Framework:** [Vite](https://vitejs.dev/) (Vanilla TS)
-- **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **State Management:** LocalStorage (Client-side cart management)
-- **Deployment:** Optimized for [Cloudflare Pages](https://pages.cloudflare.com/)
+*   🌺 **Beautiful UI:** Nature-inspired design system with a cohesive color palette.
+*   🌓 **Dark Mode Support:** Automatically adapts to the user's system preferences (Light/Dark mode).
+*   📱 **Fully Responsive:** Mobile-first approach ensuring a seamless experience across all devices.
+*   ⚡ **High Performance:** Built with Vanilla TypeScript and Vite for lightning-fast Hot Module Replacement (HMR) and highly optimized production builds.
+*   🔍 **Detailed Botanical Data:** Displays blooming seasons, light/water requirements, difficulty levels, and symbolism for each flower.
 
-## 📦 Project Structure
+## 🛠️ Tech Stack
 
-```text
-project/
-├── index.html          # Main HTML entry point
-├── src/
-│   ├── main.ts         # Application entry point & orchestrator
-│   ├── types.ts        # Shared TypeScript interfaces
-│   ├── utils.ts        # Helper functions (DOM, LocalStorage, Formatting)
-│   ├── style.css       # Tailwind imports & CSS Custom Properties (Design System)
-│   └── components/     # Reusable UI components (Hero, Catalog, Cart, etc.)
-├── public/             # Static assets (if any)
-├── package.json        # Dependencies and scripts
-├── tsconfig.json       # TypeScript configuration
-└── vite.config.ts      # Vite bundler configuration
-```
+*   **Framework:** [Vite](https://vitejs.dev/)
+*   **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict typing)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+*   **Architecture:** Component-based Vanilla DOM manipulation
 
-## 🛠️ Local Development
+## 🚀 Getting Started
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- npm, yarn, or pnpm
+
+Ensure you have [Node.js](https://nodejs.org/) (v18 or newer) installed on your machine.
 
 ### Installation
 
-1. Clone the repository and navigate to the project directory:
+1. Clone the repository (or download the source code).
+2. Navigate to the project directory:
    ```bash
-   git clone <repository-url>
-   cd flower-shop
+   cd flower-catalog
    ```
-
-2. Install dependencies:
+3. Install the dependencies:
    ```bash
    npm install
    ```
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-   The application will be available at `http://localhost:5173`.
+### Development Server
 
-### Available Scripts
+Start the Vite development server with Hot Module Replacement (HMR):
 
-- `npm run dev` - Starts the Vite development server.
-- `npm run build` - Compiles TypeScript and builds the project for production into the `dist/` directory.
-- `npm run preview` - Boots up a local static web server to preview the production build.
-- `npm run check` - Runs TypeScript type checking without emitting files.
+```bash
+npm run dev
+```
 
-## ☁️ Deployment to Cloudflare Pages
+Open your browser and navigate to `http://localhost:5173`.
 
-This project is perfectly optimized for seamless deployment to Cloudflare Pages.
+## 📜 Available Scripts
 
-### Option 1: Git Integration (Recommended)
+*   `npm run dev` - Starts the development server.
+*   `npm run build` - Compiles TypeScript and builds the project for production into the `dist/` directory.
+*   `npm run preview` - Boots up a local static web server to preview the production build.
+*   `npm run check` - Runs TypeScript type checking without emitting files.
 
-1. Push your code to a GitHub or GitLab repository.
-2. Log in to the [Cloudflare Dashboard](https://dash.cloudflare.com/).
-3. Go to **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**.
-4. Select your repository and configure the build settings as follows:
-   - **Framework preset:** `Vite`
-   - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-5. **Environment Variables (Optional but recommended):**
-   - Add a variable named `NODE_VERSION` and set its value to `18` (or higher) to ensure Cloudflare uses a modern Node.js environment.
-6. Click **Save and Deploy**. Cloudflare will automatically build and deploy your site every time you push to your main branch.
+## 📂 Project Structure
 
-### Option 2: Direct Upload (Wrangler CLI)
+```text
+flower-catalog/
+├── index.html          # Main HTML entry point
+├── package.json        # Project metadata and scripts
+├── tsconfig.json       # TypeScript configuration
+├── vite.config.ts      # Vite bundler configuration
+├── src/
+│   ├── main.ts         # Application entry point (orchestrates components)
+│   ├── types.ts        # Shared TypeScript interfaces (Flower, SiteConfig, etc.)
+│   ├── utils.ts        # Helper functions and mock data
+│   ├── style.css       # Global styles and Tailwind directives
+│   └── components/     # Reusable UI components
+│       ├── header.ts
+│       ├── hero.ts
+│       ├── flower-catalog.ts
+│       ├── flower-card.ts
+│       └── footer.ts
+```
 
-If you prefer to deploy via CLI without connecting a Git repository:
+## ☁️ Deployment
 
-1. Install Wrangler globally:
-   ```bash
-   npm install -g wrangler
-   ```
-2. Login to your Cloudflare account:
-   ```bash
-   wrangler login
-   ```
-3. Build the project locally:
-   ```bash
-   npm run build
-   ```
-4. Deploy the `dist` folder:
-   ```bash
-   wrangler pages deploy dist --project-name flower-shop
-   ```
+This project is optimized for static hosting platforms like **Cloudflare Pages**, Vercel, or Netlify. 
 
-## 🎨 Design System
-
-The application uses a custom design system built on top of Tailwind CSS. All design tokens (colors, typography, spacing) are defined as CSS Custom Properties in `src/style.css`. 
-
-To modify the theme, simply update the `:root` variables in `src/style.css`. The Tailwind configuration automatically inherits these variables.
-
-## 📝 License
-
-MIT License
+To deploy to Cloudflare Pages:
+1. Connect your GitHub/GitLab repository to Cloudflare Pages.
+2. Set the build command to: `npm run build`
+3. Set the build output directory to: `dist`
+4. Save and deploy!
