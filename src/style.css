@@ -7,24 +7,25 @@
     /* Color Palette - Natural, Organic, Plant Shop Vibe */
     --color-primary: #2d6a4f;       /* Deep Forest Green */
     --color-primary-hover: #1b4332; /* Darker Green */
-    --color-secondary: #8b5a2b;     /* Earthy Brown */
-    --color-secondary-hover: #6b4423;
-    --color-accent: #e07a5f;        /* Terracotta / Warm Accent */
+    --color-secondary: #74c69d;     /* Fresh Light Green */
+    --color-secondary-hover: #52b788;
+    --color-accent: #e07a5f;        /* Terracotta / Warm Accent for pots/highlights */
     
-    --color-bg: #fbf9f6;            /* Warm Off-White */
-    --color-surface: #ffffff;       /* Pure White for cards */
-    --color-text: #1a2e25;          /* Very Dark Green/Gray for text */
+    --color-bg: #fbf9f6;            /* Warm Off-White for a clean, natural look */
+    --color-surface: #ffffff;       /* Pure White for cards and elevated elements */
+    --color-text: #1a2e25;          /* Very Dark Green/Gray for readable text */
     --color-muted: #6b7280;         /* Gray for secondary text */
-    --color-border: #e2e8f0;        /* Light Gray for borders */
+    --color-border: #e2e8f0;        /* Light Gray for subtle borders */
 
     /* Typography */
-    --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     /* Spacing & Radii */
     --radius-sm: 0.375rem;
     --radius-md: 0.75rem;
     --radius-lg: 1.25rem;
+    --radius-xl: 2rem;
     --radius-full: 9999px;
 
     /* Shadows - Soft and organic */
@@ -36,6 +37,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* Accounts for fixed header during anchor scrolling */
   }
 
   body {
@@ -48,6 +50,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -61,75 +64,61 @@
   /* Reusable UI Components */
   
   .btn-primary {
-    @apply bg-[var(--color-primary)] text-white font-medium py-2.5 px-5 rounded-[var(--radius-md)] transition-all duration-300 hover:bg-[var(--color-primary-hover)] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+    @apply inline-flex items-center justify-center gap-2 bg-[var(--color-primary)] text-white font-medium py-3 px-6 rounded-[var(--radius-full)] transition-all duration-300 hover:bg-[var(--color-primary-hover)] hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)];
   }
 
   .btn-secondary {
-    @apply bg-transparent text-[var(--color-primary)] border-2 border-[var(--color-primary)] font-medium py-2 px-5 rounded-[var(--radius-md)] transition-all duration-300 hover:bg-[var(--color-primary)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+    @apply inline-flex items-center justify-center gap-2 bg-transparent text-[var(--color-primary)] border-2 border-[var(--color-primary)] font-medium py-2.5 px-6 rounded-[var(--radius-full)] transition-all duration-300 hover:bg-[var(--color-primary)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)];
   }
 
   .btn-ghost {
-    @apply bg-transparent text-[var(--color-text)] font-medium py-2 px-4 rounded-[var(--radius-md)] transition-colors duration-200 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-[var(--color-border)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)];
+    @apply inline-flex items-center justify-center gap-2 bg-transparent text-[var(--color-text)] font-medium py-2 px-4 rounded-[var(--radius-md)] transition-colors duration-200 hover:bg-black/5 hover:text-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg)];
   }
 
   .card {
     @apply bg-[var(--color-surface)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-md)] overflow-hidden transition-all duration-300 hover:shadow-[var(--shadow-hover)] hover:-translate-y-1 flex flex-col;
   }
 
-  .input-field {
-    @apply w-full bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded-[var(--radius-md)] px-4 py-3 focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-colors placeholder-[var(--color-muted)];
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full;
   }
 
-  .label-text {
-    @apply block text-sm font-medium text-[var(--color-text)] mb-1.5;
+  .heading-xl {
+    @apply text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--color-text)] leading-tight;
   }
 
-  .badge {
-    @apply absolute -top-1 -right-1 bg-[var(--color-accent)] text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-[var(--radius-full)] shadow-sm;
+  .heading-lg {
+    @apply text-3xl sm:text-4xl font-bold tracking-tight text-[var(--color-text)];
   }
 
-  /* Drawer & Modal Overlays */
-  .overlay {
-    @apply fixed inset-0 bg-black/40 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300;
+  .heading-md {
+    @apply text-xl sm:text-2xl font-semibold text-[var(--color-text)];
   }
 
-  .overlay.active {
-    @apply opacity-100 pointer-events-auto;
-  }
-
-  /* Slide-out Cart Drawer */
-  .drawer {
-    @apply fixed top-0 right-0 h-full w-full max-w-md bg-[var(--color-surface)] shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col;
-  }
-
-  .drawer.active {
-    @apply translate-x-0;
-  }
-
-  /* Centered Modal */
-  .modal {
-    @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-[var(--color-surface)] rounded-[var(--radius-lg)] shadow-2xl z-50 transform scale-95 opacity-0 pointer-events-none transition-all duration-300 flex flex-col max-h-[90vh] overflow-y-auto;
-  }
-
-  .modal.active {
-    @apply scale-100 opacity-100 pointer-events-auto;
+  .text-body {
+    @apply text-base sm:text-lg text-[var(--color-muted)] leading-relaxed;
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--color-secondary);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-muted);
+  background: var(--color-primary);
+}
+
+/* Image loading utility */
+.img-loading {
+  @apply animate-pulse bg-[var(--color-border)];
 }

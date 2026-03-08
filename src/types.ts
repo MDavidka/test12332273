@@ -1,71 +1,58 @@
-export interface Plant {
+export interface ComponentProps {
+  /** Optional CSS classes to append to the component's root element */
+  className?: string;
+  /** Optional ID for the component's root element, useful for anchor links */
+  id?: string;
+}
+
+export interface NavItem {
+  label: string;
+  href: string;
+}
+
+export interface OpeningHours {
+  days: string;
+  hours: string;
+}
+
+export interface SocialLink {
+  platform: string;
+  url: string;
+  /** SVG path or full SVG string for the social icon */
+  iconSvg: string;
+}
+
+export interface StoreInfo {
+  name: string;
+  tagline: string;
+  description: string;
+  address: string;
+  phone: string;
+  email: string;
+  openingHours: OpeningHours[];
+  socialLinks: SocialLink[];
+}
+
+export interface PlantCategory {
   id: string;
   name: string;
-  scientificName?: string;
-  price: number;
-  image: string;
   description: string;
-  careLevel: 'Easy' | 'Medium' | 'Hard';
-  lightRequirement: string;
-  waterRequirement: string;
+  imageUrl: string;
+  /** Optional list of features or plant types within this category */
+  features?: string[];
 }
 
-export interface CartItem {
-  plant: Plant;
-  quantity: number;
+export interface HeroContent {
+  title: string;
+  subtitle: string;
+  ctaText: string;
+  ctaLink: string;
+  backgroundImageUrl: string;
 }
 
-export interface StoreState {
-  cart: CartItem[];
-  isCartOpen: boolean;
-  isCheckoutOpen: boolean;
-  orderComplete: boolean;
-}
-
-export type StateChangeListener = (state: StoreState) => void;
-
-export interface PaymentDetails {
-  fullName: string;
-  email: string;
-  address: string;
-  city: string;
-  zipCode: string;
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-}
-
-export interface ComponentProps {
-  className?: string;
-}
-
-export interface HeaderProps extends ComponentProps {
-  siteName: string;
-  onCartClick: () => void;
-}
-
-export interface ProductCardProps extends ComponentProps {
-  plant: Plant;
-  onAddToCart: (plant: Plant) => void;
-}
-
-export interface ProductListProps extends ComponentProps {
-  plants: Plant[];
-  onAddToCart: (plant: Plant) => void;
-}
-
-export interface CartProps extends ComponentProps {
-  isOpen: boolean;
-  items: CartItem[];
-  onClose: () => void;
-  onRemoveItem: (plantId: string) => void;
-  onUpdateQuantity: (plantId: string, quantity: number) => void;
-  onCheckoutClick: () => void;
-}
-
-export interface CheckoutProps extends ComponentProps {
-  isOpen: boolean;
-  totalAmount: number;
-  onClose: () => void;
-  onPaymentSubmit: (details: PaymentDetails) => Promise<void>;
+export interface AboutContent {
+  title: string;
+  paragraphs: string[];
+  imageUrl: string;
+  imageAlt: string;
 }
