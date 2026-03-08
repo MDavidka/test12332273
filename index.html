@@ -1,91 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website in Progress</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1c;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .logo-container {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-        }
-        .logo {
-            width: 48px;
-            height: 24px;
-            background-color: rgba(255, 255, 255, 0.6);
-            border-radius: 4px;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
-        }
-        .content {
-            text-align: left;
-            max-width: 600px;
-            width: 100%;
-            padding: 2rem;
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            letter-spacing: -0.025em;
-        }
-        p {
-            font-size: 1.125rem;
-            color: #a1a1aa;
-            margin-bottom: 2.5rem;
-        }
-        .return-btn {
-            background-color: #4b4b4b;
-            color: #ffffff;
-            border: none;
-            border-radius: 9999px;
-            padding: 0.75rem 2.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .return-btn:hover {
-            background-color: #5b5b5b;
-        }
-        .footer {
-            position: absolute;
-            bottom: 2rem;
-            text-align: center;
-            width: 100%;
-            color: #a1a1aa;
-            font-size: 0.875rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone Store</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="logo-container">
-        <div class="logo"></div>
-    </div>
-    <div class="content">
-        <h1>Here is your site</h1>
-        <p>set up your website stile on the dasboard</p>
-        <button class="return-btn" onclick="window.parent !== window ? window.parent.postMessage('returnToDashboard', '*') : window.location.href='/'">return</button>
-    </div>
-    <div class="footer">
-        privacy and policy &bull; terms of condition
-    </div>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
