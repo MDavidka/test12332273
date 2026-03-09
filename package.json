@@ -1,22 +1,22 @@
 {
-  "name": "modern-phone-brand",
+  "name": "marton-david-portfolio",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "check": "tsc --noEmit",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check": "tsc --noEmit"
   },
   "dependencies": {
-    "lucide": "^0.378.0"
+    "firebase": "^10.8.1"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.11"
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4"
   }
 }

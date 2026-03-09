@@ -1,158 +1,113 @@
-import { isValidEmail } from '../utils';
+import type { ComponentProps } from '../types';
+import { createElement, clearContainer } from '../utils';
 
 /**
- * Renders the site footer containing legal links, navigation, and a newsletter signup.
+ * Renders the global footer component.
+ * Contains copyright information and social links.
  * 
- * @param container - The DOM element to append the footer to.
+ * @param props Component initialization properties.
  */
-export function renderFooter(container: HTMLElement): void {
-  const footer = document.createElement('footer');
-  // Using a dark theme for the footer to match the premium tech aesthetic
-  footer.className = 'bg-gray-950 border-t border-gray-800 pt-16 pb-8 text-sm mt-auto';
+export function renderFooter({ container }: ComponentProps): void {
+  if (!container) return;
 
-  footer.innerHTML = `
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 mb-12">
-        
-        <!-- Brand & Newsletter Section -->
-        <div class="md:col-span-12 lg:col-span-4">
-          <a href="/" class="text-2xl font-bold text-white tracking-tight mb-4 block">
-            NEXUS<span class="text-blue-500">.</span>
-          </a>
-          <p class="text-gray-400 mb-6 leading-relaxed max-w-md">
-            Experience the future of mobile technology. Premium design, unparalleled performance, and innovative features crafted for tomorrow.
-          </p>
-          
-          <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md">
-            <div class="relative flex-grow">
-              <label for="newsletter-email" class="sr-only">Email address</label>
-              <input 
-                type="email" 
-                id="newsletter-email" 
-                placeholder="Enter your email" 
-                class="w-full bg-gray-900 border border-gray-700 text-white px-4 py-2.5 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors placeholder-gray-500"
-                required
-              >
-            </div>
-            <button 
-              type="submit" 
-              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-            >
-              Subscribe
-            </button>
-          </form>
-          <p id="newsletter-message" class="mt-2 text-sm hidden transition-opacity duration-300"></p>
-        </div>
+  // Clear previous footer content
+  clearContainer(container);
 
-        <!-- Spacer for large screens -->
-        <div class="hidden lg:block lg:col-span-2"></div>
+  // Main footer wrapper
+  const footer = createElement('footer', {
+    className: 'w-full border-t border-slate-800 bg-slate-900/50 py-8 mt-auto transition-all duration-300'
+  });
 
-        <!-- Navigation Links: Products -->
-        <div class="md:col-span-4 lg:col-span-2">
-          <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-xs">Products</h3>
-          <ul class="space-y-3">
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Nexus Pro Max</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Nexus Pro</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Nexus Standard</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Accessories</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Compare Models</a></li>
-          </ul>
-        </div>
+  const innerContainer = createElement('div', {
+    className: 'container mx-auto px-4 max-w-5xl flex flex-col md:flex-row items-center justify-between gap-4'
+  });
 
-        <!-- Navigation Links: Support -->
-        <div class="md:col-span-4 lg:col-span-2">
-          <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-xs">Support</h3>
-          <ul class="space-y-3">
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Repair Service</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Warranty Info</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Order Status</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
-          </ul>
-        </div>
+  // --- Left Section: Copyright & Info ---
+  const leftSection = createElement('div', {
+    className: 'flex flex-col items-center md:items-start gap-1'
+  });
 
-        <!-- Navigation Links: Company -->
-        <div class="md:col-span-4 lg:col-span-2">
-          <h3 class="text-white font-semibold mb-4 uppercase tracking-wider text-xs">Company</h3>
-          <ul class="space-y-3">
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Newsroom</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Environment</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
-          </ul>
-        </div>
-      </div>
+  const currentYear = new Date().getFullYear();
+  const copyrightText = createElement('p', {
+    className: 'text-sm text-slate-400',
+    text: `© ${currentYear} Marton David. All rights reserved.`
+  });
 
-      <!-- Bottom Bar: Copyright & Socials -->
-      <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-gray-500 text-center md:text-left">
-          &copy; ${new Date().getFullYear()} Nexus Mobile Inc. All rights reserved.
-        </p>
-        
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-500 hover:text-white transition-colors">
-            <span class="sr-only">Twitter</span>
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-            </svg>
-          </a>
-          <a href="#" class="text-gray-500 hover:text-white transition-colors">
-            <span class="sr-only">Instagram</span>
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
+  const techStackText = createElement('p', {
+    className: 'text-xs text-slate-500 font-mono',
+    text: 'Built with Vite, TypeScript & Tailwind'
+  });
+
+  leftSection.appendChild(copyrightText);
+  leftSection.appendChild(techStackText);
+
+  // --- Right Section: Social Links ---
+  const rightSection = createElement('div', {
+    className: 'flex items-center gap-5'
+  });
+
+  // GitHub Link
+  const githubLink = createSocialLink(
+    'https://github.com',
+    'GitHub',
+    '<path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />'
+  );
+
+  // LinkedIn Link
+  const linkedinLink = createSocialLink(
+    'https://linkedin.com',
+    'LinkedIn',
+    '<path fill-rule="evenodd" clip-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />'
+  );
+
+  // Email Link
+  const emailLink = createSocialLink(
+    'mailto:hello@marton.dev',
+    'Email',
+    '<path fill-rule="evenodd" clip-rule="evenodd" d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />'
+  );
+
+  rightSection.appendChild(githubLink);
+  rightSection.appendChild(linkedinLink);
+  rightSection.appendChild(emailLink);
+
+  // Assemble the footer
+  innerContainer.appendChild(leftSection);
+  innerContainer.appendChild(rightSection);
+  footer.appendChild(innerContainer);
+  container.appendChild(footer);
+}
+
+/**
+ * Helper function to create a standardized social media icon link.
+ * 
+ * @param url The destination URL.
+ * @param label The aria-label for accessibility.
+ * @param svgPath The inner SVG path string.
+ * @returns An HTMLAnchorElement containing the SVG icon.
+ */
+function createSocialLink(url: string, label: string, svgPath: string): HTMLAnchorElement {
+  const link = document.createElement('a');
+  link.href = url;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.setAttribute('aria-label', label);
+  link.className = 'text-slate-400 hover:text-cyan-400 transition-colors duration-200';
+
+  // Create SVG element
+  // Note: We use innerHTML here for simplicity with static, trusted SVG paths.
+  // In a larger app, a dedicated Icon component or createElementNS would be preferred.
+  link.innerHTML = `
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      viewBox="0 0 24 24" 
+      fill="currentColor" 
+      class="w-5 h-5"
+      aria-hidden="true"
+    >
+      ${svgPath}
+    </svg>
   `;
 
-  // Attach event listener for the newsletter form
-  const form = footer.querySelector('#newsletter-form') as HTMLFormElement;
-  const emailInput = footer.querySelector('#newsletter-email') as HTMLInputElement;
-  const messageEl = footer.querySelector('#newsletter-message') as HTMLParagraphElement;
-
-  if (form && emailInput && messageEl) {
-    form.addEventListener('submit', (e: Event) => {
-      e.preventDefault();
-      const email = emailInput.value.trim();
-      
-      // Reset message state
-      messageEl.classList.remove('hidden', 'text-red-400', 'text-green-400');
-      
-      if (!isValidEmail(email)) {
-        messageEl.textContent = 'Please enter a valid email address.';
-        messageEl.classList.add('text-red-400');
-        return;
-      }
-
-      // Simulate API call for subscription
-      const btn = form.querySelector('button');
-      if (btn) {
-        const originalText = btn.textContent || 'Subscribe';
-        btn.textContent = 'Subscribing...';
-        btn.disabled = true;
-        btn.classList.add('opacity-70', 'cursor-not-allowed');
-
-        setTimeout(() => {
-          messageEl.textContent = 'Thanks for subscribing! Check your inbox soon.';
-          messageEl.classList.add('text-green-400');
-          emailInput.value = '';
-          
-          // Restore button state
-          btn.textContent = originalText;
-          btn.disabled = false;
-          btn.classList.remove('opacity-70', 'cursor-not-allowed');
-          
-          // Hide success message after 4 seconds
-          setTimeout(() => {
-            messageEl.classList.add('hidden');
-          }, 4000);
-        }, 1200);
-      }
-    });
-  }
-
-  container.appendChild(footer);
+  return link;
 }

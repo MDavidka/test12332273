@@ -24,10 +24,15 @@ dist-ssr/
 *.sln
 *.sw?
 
-# Env
+# TypeScript
+*.tsbuildinfo
+
+# Environment Variables
 .env
 .env.*
 !.env.example
 
-# TypeScript
-*.tsbuildinfo
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log

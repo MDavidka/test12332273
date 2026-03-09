@@ -1,154 +1,107 @@
-import type { CartItem } from './types';
-
 /**
- * Formats a numeric value into a localized currency string.
- * 
- * @param amount - The numeric amount to format
- * @param currency - The ISO 4217 currency code (default: 'USD')
- * @param locale - The locale string (default: 'en-US')
- * @returns A formatted currency string (e.g., "$999.00")
+ * Shared utility functions for DOM manipulation, validation, and formatting.
  */
-export function formatCurrency(amount: number, currency: string = 'USD', locale: string = 'en-US'): string {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: currency,
-    minimumFractionDigits: 0, // Don't show .00 for whole numbers if preferred, but standard is 2
-    maximumFractionDigits: 2,
-  }).format(amount);
-}
 
 /**
- * Calculates the total price of items in a shopping cart.
- * Assumes CartItem has `price` and `quantity` properties.
+ * Creates an HTML element with specified classes, attributes, and content.
  * 
- * @param items - Array of cart items
- * @returns The total cost
- */
-export function calculateCartTotal(items: CartItem[]): number {
-  if (!Array.isArray(items)) return 0;
-  return items.reduce((total, item) => total + (item.price * item.quantity), 0);
-}
-
-/**
- * Calculates a discounted price based on a percentage.
- * 
- * @param originalPrice - The base price
- * @param discountPercentage - The percentage to discount (0-100)
- * @returns The new discounted price
- */
-export function calculateDiscount(originalPrice: number, discountPercentage: number): number {
-  if (discountPercentage < 0 || discountPercentage > 100) return originalPrice;
-  return originalPrice - (originalPrice * (discountPercentage / 100));
-}
-
-/**
- * Utility for conditionally joining Tailwind CSS classes.
- * Filters out falsy values and normalizes whitespace.
- * 
- * @param classes - An array of class strings or falsy values
- * @returns A clean, space-separated string of classes
- */
-export function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes
-    .filter(Boolean)
-    .join(' ')
-    .trim()
-    .replace(/\s+/g, ' ');
-}
-
-/**
- * A lightweight Vanilla JS DOM element creator.
- * Simplifies building complex DOM structures without a framework.
- * 
- * @param tag - The HTML tag name to create
- * @param attributes - An object of HTML attributes or event listeners (e.g., onClick)
- * @param children - Child elements or text nodes to append
- * @returns The constructed HTMLElement
+ * @param tag The HTML tag name to create.
+ * @param options Configuration object for the element.
+ * @returns The created HTML element.
  */
 export function createElement<K extends keyof HTMLElementTagNameMap>(
   tag: K,
-  attributes: Record<string, string | boolean | EventListener> = {},
-  ...children: (HTMLElement | string | undefined | null)[]
+  options?: {
+    className?: string;
+    attributes?: Record<string, string>;
+    text?: string;
+    html?: string;
+    children?: HTMLElement[];
+  }
 ): HTMLElementTagNameMap[K] {
   const element = document.createElement(tag);
+  
+  if (!options) return element;
 
-  for (const [key, value] of Object.entries(attributes)) {
-    if (key.startsWith('on') && typeof value === 'function') {
-      // Handle event listeners (e.g., onClick -> click)
-      const eventName = key.toLowerCase().substring(2);
-      element.addEventListener(eventName, value as EventListener);
-    } else if (typeof value === 'boolean') {
-      // Handle boolean attributes (e.g., disabled, checked)
-      if (value) element.setAttribute(key, '');
-    } else if (value !== undefined && value !== null) {
-      // Handle standard string attributes
-      if (key === 'className') {
-        element.setAttribute('class', String(value));
-      } else {
-        element.setAttribute(key, String(value));
-      }
-    }
+  if (options.className) {
+    element.className = options.className;
+  }
+  
+  if (options.attributes) {
+    Object.entries(options.attributes).forEach(([key, value]) => {
+      element.setAttribute(key, value);
+    });
   }
 
-  for (const child of children) {
-    if (!child) continue;
-    if (typeof child === 'string') {
-      element.appendChild(document.createTextNode(child));
-    } else {
-      element.appendChild(child);
-    }
+  if (options.text) {
+    element.textContent = options.text;
+  } else if (options.html) {
+    element.innerHTML = options.html;
+  }
+
+  if (options.children) {
+    options.children.forEach(child => element.appendChild(child));
   }
 
   return element;
 }
 
 /**
- * Safe LocalStorage wrapper with JSON parsing and fallback values.
+ * Safely clears all child elements from a container.
+ * 
+ * @param container The HTML element to clear.
  */
-export const storage = {
-  /**
-   * Retrieves and parses a value from localStorage.
-   * @param key - The storage key
-   * @param fallback - The default value if the key doesn't exist or parsing fails
-   */
-  get<T>(key: string, fallback: T): T {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : fallback;
-    } catch (error) {
-      console.warn(`Error reading ${key} from localStorage`, error);
-      return fallback;
-    }
-  },
-  
-  /**
-   * Stringifies and saves a value to localStorage.
-   * @param key - The storage key
-   * @param value - The value to store
-   */
-  set<T>(key: string, value: T): void {
-    try {
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.warn(`Error writing ${key} to localStorage`, error);
-    }
+export function clearContainer(container: HTMLElement | null): void {
+  if (!container) return;
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
   }
-};
+}
 
 /**
- * Debounces a function call, ensuring it only runs after a specified delay
- * of inactivity. Useful for window resize or scroll events.
+ * Validates an email address format using a standard regex.
  * 
- * @param func - The function to debounce
- * @param wait - The delay in milliseconds
+ * @param email The email string to validate.
+ * @returns True if the email format is valid, false otherwise.
  */
-export function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout> | null = null;
-  
-  return function(...args: Parameters<T>) {
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func(...args);
-    }, wait);
-  };
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+/**
+ * Utility to delay execution (useful for simulating network requests or animations).
+ * 
+ * @param ms Milliseconds to delay.
+ * @returns A promise that resolves after the specified delay.
+ */
+export function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Basic HTML sanitizer to prevent XSS when rendering dynamic text content.
+ * 
+ * @param str The string to sanitize.
+ * @returns The sanitized string safe for insertion into the DOM.
+ */
+export function escapeHTML(str: string): string {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * Combines multiple class names conditionally.
+ * A lightweight alternative to libraries like 'clsx' or 'tailwind-merge'.
+ * 
+ * @param classes An array of class names or falsy values.
+ * @returns A single string of combined class names.
+ */
+export function classNames(...classes: (string | undefined | null | false)[]): string {
+  return classes.filter(Boolean).join(' ');
 }

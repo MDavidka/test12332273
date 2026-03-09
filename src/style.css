@@ -1,174 +1,112 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Color Palette - Light Mode (Crisp Whites & Metallic Accents) */
-    --color-bg: #ffffff; /* Pure White */
-    --color-surface: #f8fafc; /* Slate 50 - Subtle off-white for cards */
-    --color-text: #0f172a; /* Slate 900 - Deep contrast text */
-    --color-text-muted: #64748b; /* Slate 500 - Secondary text */
+    /* Color Palette - Dark Mode First */
+    --color-bg: #0f172a; /* slate-900 */
+    --color-surface: #1e293b; /* slate-800 */
+    --color-surface-hover: #334155; /* slate-700 */
     
-    /* Brand Colors */
-    --color-primary: #0f172a; /* Slate 900 - Apple-like dark buttons in light mode */
-    --color-primary-hover: #334155; /* Slate 700 */
-    --color-accent: #2563eb; /* Blue 600 - Anodized blue accent */
-    --color-accent-hover: #1d4ed8; /* Blue 700 */
+    --color-text: #f8fafc; /* slate-50 */
+    --color-text-muted: #94a3b8; /* slate-400 */
     
-    /* UI Elements */
-    --color-border: #e2e8f0; /* Slate 200 */
-    --color-border-focus: #93c5fd; /* Blue 300 */
-    --color-ring: rgba(37, 99, 235, 0.25);
-    --color-error: #ef4444; /* Red 500 */
+    --color-primary: #06b6d4; /* cyan-500 */
+    --color-primary-hover: #22d3ee; /* cyan-400 */
+    
+    --color-accent: #10b981; /* emerald-500 */
+    --color-error: #ef4444; /* red-500 */
 
     /* Typography */
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      /* Color Palette - Dark Mode (Deep Blacks & Titanium) */
-      --color-bg: #020617; /* Slate 950 - Deep Black */
-      --color-surface: #0f172a; /* Slate 900 - Elevated surface */
-      --color-text: #f8fafc; /* Slate 50 - Crisp white text */
-      --color-text-muted: #94a3b8; /* Slate 400 - Muted text */
-      
-      /* Brand Colors */
-      --color-primary: #f8fafc; /* Slate 50 - White buttons in dark mode */
-      --color-primary-hover: #e2e8f0; /* Slate 200 */
-      --color-accent: #3b82f6; /* Blue 500 - Bright anodized blue */
-      --color-accent-hover: #60a5fa; /* Blue 400 */
-      
-      /* UI Elements */
-      --color-border: #1e293b; /* Slate 800 */
-      --color-border-focus: #3b82f6; /* Blue 500 */
-      --color-ring: rgba(59, 130, 246, 0.25);
-      --color-error: #f87171; /* Red 400 */
-    }
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   }
 
   html {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: -0.025em;
   }
 }
 
 @layer components {
-  /* Glassmorphism Navigation */
-  .glass-nav {
-    @apply sticky top-0 z-50 backdrop-blur-xl transition-colors duration-300 border-b;
-    background-color: rgba(var(--color-bg-rgb, 255, 255, 255), 0.7);
-    border-color: var(--color-border);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .glass-nav {
-      background-color: rgba(2, 6, 23, 0.7); /* Slate 950 with opacity */
-    }
-  }
-
-  /* Buttons */
+  /* Reusable Button Styles */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900;
     background-color: var(--color-primary);
-    color: var(--color-bg); /* Inverse text color for high contrast */
+    color: #000000;
   }
-
-  .btn-primary:hover:not(:disabled) {
+  
+  .btn-primary:hover {
     background-color: var(--color-primary-hover);
-    transform: translateY(-1px);
   }
 
-  .btn-accent {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium text-white transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed;
-    background-color: var(--color-accent);
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900;
+    color: var(--color-text-muted);
   }
 
-  .btn-accent:hover:not(:disabled) {
-    background-color: var(--color-accent-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px 0 var(--color-ring);
+  .btn-ghost:hover {
+    color: var(--color-text);
+    background-color: var(--color-surface);
   }
 
-  .btn-outline {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full border text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-4;
-    background-color: transparent;
-    border-color: var(--color-border);
+  /* Form Inputs */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-md border focus:outline-none focus:ring-2 transition-colors duration-200;
+    background-color: var(--color-bg);
+    border-color: var(--color-surface-hover);
     color: var(--color-text);
   }
 
-  .btn-outline:hover {
-    border-color: var(--color-text);
+  .input-field:focus {
+    border-color: var(--color-primary);
+    --tw-ring-color: var(--color-primary);
   }
 
-  /* Product Cards */
-  .product-card {
-    @apply relative flex flex-col rounded-3xl p-6 transition-all duration-500 overflow-hidden group cursor-pointer;
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
-  }
-
-  .product-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .product-card:hover {
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-    }
-  }
-
-  /* Badges */
-  .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-    background-color: var(--color-surface);
+  .input-field::placeholder {
     color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
   }
 
-  .badge-accent {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white;
-    background-color: var(--color-accent);
+  /* Glassmorphism Card */
+  .glass-card {
+    @apply rounded-xl border backdrop-blur-sm;
+    background-color: rgba(30, 41, 59, 0.7); /* surface with opacity */
+    border-color: rgba(255, 255, 255, 0.1);
   }
 }
 
 @layer utilities {
-  /* Text Gradients for Premium Feel */
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400;
-  }
-  
-  .text-gradient-accent {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-300;
-  }
-
-  /* Hide Scrollbar but keep functionality */
-  .no-scrollbar::-webkit-scrollbar {
+  /* Custom Scrollbar for a polished developer feel */
+  .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  .no-scrollbar {
+  .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, var(--color-primary), var(--color-accent));
   }
 }

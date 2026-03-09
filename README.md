@@ -1,108 +1,98 @@
-# Nexus Mobile - Premium E-Commerce Storefront
+# Marton David | Senior Frontend Engineer Portfolio
 
-A high-performance, minimalist e-commerce frontend for a premium smartphone brand. Built with **Vite**, **Vanilla TypeScript**, and **Tailwind CSS**, designed for maximum speed and a sleek user experience.
+A high-performance, production-ready personal portfolio and secure client portal. Built with a modern, minimalist design system focusing on dark mode, typography, and seamless user experience.
 
-## 🚀 Tech Stack
-
-*   **Framework:** [Vite](https://vitejs.dev/) (Vanilla TS)
-*   **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
-*   **Styling:** [Tailwind CSS](https://tailwindcss.com/) (Utility-first, Custom Design Tokens)
-*   **Deployment:** Optimized for [Cloudflare Pages](https://pages.cloudflare.com/)
+This project demonstrates a lightweight Single Page Application (SPA) architecture using **Vanilla TypeScript** and **Vite**, completely bypassing heavy UI frameworks while maintaining component-driven development, reactive state management, and robust routing.
 
 ## ✨ Features
 
-*   **Immersive Hero Section:** High-impact product showcase with smooth animations.
-*   **Dynamic Product Grid:** Responsive layout displaying available phone models, colors, and pricing.
-*   **Technical Specifications:** Clean, readable breakdown of device features (camera, battery, processor).
-*   **Interactive Cart Modal:** Slide-out shopping cart for seamless user flow and simulated checkout.
-*   **Dark Mode Ready:** Built-in CSS variables supporting system-level dark/light mode preferences.
-*   **Fully Responsive:** Mobile-first design ensuring perfect rendering across all device sizes.
+*   **Modern Minimalist UI:** Clean, breathable layouts with a professional dark-mode-first aesthetic.
+*   **Vanilla TypeScript SPA:** Custom, lightweight DOM manipulation and state management without React/Vue/Angular overhead.
+*   **Secure Authentication:** Integrated Firebase Authentication for a gated client portal/dashboard.
+*   **Protected Routes:** Client-side route protection preventing unauthorized access to the dashboard.
+*   **Tailwind CSS:** Utility-first styling with custom design tokens (glassmorphism, custom scrollbars, gradients).
+*   **Responsive Design:** Mobile-first approach ensuring perfect rendering across all device sizes.
+
+## 🚀 Tech Stack
+
+*   **Build Tool:** [Vite](https://vitejs.dev/)
+*   **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+*   **Authentication:** [Firebase Auth](https://firebase.google.com/)
+*   **Deployment Target:** Cloudflare Pages
 
 ## 📦 Project Structure
 
 ```text
 project/
-├── index.html              # Main HTML entry point
-├── package.json            # Project metadata and scripts
-├── tsconfig.json           # TypeScript compiler configuration
-├── vite.config.ts          # Vite bundler configuration
+├── index.html            # Application entry point
 ├── src/
-│   ├── main.ts             # Application entry point (orchestrator)
-│   ├── types.ts            # Shared TypeScript interfaces (PhoneProduct, CartItem, etc.)
-│   ├── utils.ts            # Helper functions (currency formatting, DOM utilities)
-│   ├── style.css           # Global Tailwind styles and CSS custom properties
-│   └── components/         # Modular UI components
-│       ├── header.ts       # Navigation and cart trigger
-│       ├── hero.ts         # Landing page showcase
-│       ├── featureSpecs.ts # Technical details section
-│       ├── productGrid.ts  # Storefront inventory display
-│       ├── cartModal.ts    # Slide-out shopping cart
-│       └── footer.ts       # Site footer
+│   ├── main.ts           # State management, routing, and app initialization
+│   ├── types.ts          # Shared TypeScript interfaces and types
+│   ├── utils.ts          # DOM manipulation and helper functions
+│   ├── style.css         # Tailwind directives and global CSS variables
+│   ├── firebase.ts       # Firebase initialization and auth services
+│   └── components/       # Reusable UI components
+│       ├── header.ts
+│       ├── footer.ts
+│       ├── welcome.ts    # Public portfolio view
+│       └── login.ts      # Authentication view
 ```
 
-## 🛠️ Local Development
+## 🛠️ Getting Started
 
 ### Prerequisites
-*   [Node.js](https://nodejs.org/) (v18 or higher recommended)
+
+*   Node.js (v18+ recommended)
 *   npm, yarn, or pnpm
+*   A Firebase Project with Email/Password Authentication enabled.
 
-### Setup Instructions
+### Installation
 
-1.  **Install dependencies:**
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/yourusername/marton-david-portfolio.git
+    cd marton-david-portfolio
+    ```
+
+2.  **Install dependencies:**
     ```bash
     npm install
     ```
 
-2.  **Start the development server:**
+3.  **Environment Variables:**
+    Create a `.env.local` file in the root directory and add your Firebase configuration details:
+    ```env
+    VITE_FIREBASE_API_KEY=your_api_key
+    VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+    VITE_FIREBASE_PROJECT_ID=your_project_id
+    VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+    VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+    VITE_FIREBASE_APP_ID=your_app_id
+    ```
+
+4.  **Start the development server:**
     ```bash
     npm run dev
     ```
-    The site will be available at `http://localhost:5173`.
+    The application will be available at `http://localhost:5173`.
 
-3.  **Type Checking:**
-    To run TypeScript compiler checks without emitting files:
-    ```bash
-    npm run check
-    ```
+## 📜 Available Scripts
 
-4.  **Build for Production:**
-    ```bash
-    npm run build
-    ```
-    This will generate optimized static assets in the `dist/` directory.
+*   `npm run dev`: Starts the Vite development server with Hot Module Replacement (HMR).
+*   `npm run build`: Compiles TypeScript and bundles the application for production into the `dist/` directory.
+*   `npm run preview`: Boots up a local static web server to preview the production build.
+*   `npm run check`: Runs the TypeScript compiler to check for type errors without emitting files.
 
-5.  **Preview Production Build:**
-    ```bash
-    npm run preview
-    ```
+## ☁️ Deployment
 
-## ☁️ Deployment to Cloudflare Pages
+This project is optimized for deployment on **Cloudflare Pages**.
 
-This project is pre-configured for seamless deployment to Cloudflare Pages.
-
-### Option 1: GitHub/GitLab Integration (Recommended)
-1. Push this repository to GitHub or GitLab.
-2. Log in to the [Cloudflare Dashboard](https://dash.cloudflare.com/).
-3. Navigate to **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**.
-4. Select your repository and configure the build settings:
-   *   **Framework preset:** `None`
-   *   **Build command:** `npm run build`
-   *   **Build output directory:** `dist`
-5. Click **Save and Deploy**.
-
-*Note: It is recommended to add an environment variable `NODE_VERSION` set to `18` or higher in your Cloudflare Pages settings to ensure compatibility with Vite.*
-
-### Option 2: Direct Upload (Wrangler CLI)
-If you prefer to deploy via CLI:
-1. Build the project locally:
-   ```bash
-   npm run build
-   ```
-2. Deploy the `dist` folder using Wrangler:
-   ```bash
-   npx wrangler pages deploy dist
-   ```
+1. Connect your GitHub repository to Cloudflare Pages.
+2. Set the build command to `npm run build`.
+3. Set the build output directory to `dist`.
+4. Add your Firebase environment variables (`VITE_FIREBASE_*`) in the Cloudflare Pages settings.
 
 ## 📄 License
 
-This project is proprietary and created for demonstration purposes.
+This project is private and intended for demonstration and portfolio purposes.
