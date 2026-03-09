@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,112 +6,169 @@
 
 @layer base {
   :root {
-    /* Color Palette - Light Mode (Nature & Floral Theme) */
-    --color-bg: #fdfbf7; /* Warm off-white */
-    --color-surface: #ffffff;
-    --color-text: #1f2937; /* Gray 800 */
-    --color-text-muted: #4b5563; /* Gray 600 */
+    /* Color Palette - Light Mode (Crisp Whites & Metallic Accents) */
+    --color-bg: #ffffff; /* Pure White */
+    --color-surface: #f8fafc; /* Slate 50 - Subtle off-white for cards */
+    --color-text: #0f172a; /* Slate 900 - Deep contrast text */
+    --color-text-muted: #64748b; /* Slate 500 - Secondary text */
     
     /* Brand Colors */
-    --color-primary: #db2777; /* Pink 600 - Floral accent */
-    --color-primary-hover: #be185d; /* Pink 700 */
-    --color-secondary: #d1fae5; /* Emerald 100 - Pastel green */
-    --color-secondary-dark: #059669; /* Emerald 600 */
-    --color-accent: #8b5cf6; /* Violet 500 */
+    --color-primary: #0f172a; /* Slate 900 - Apple-like dark buttons in light mode */
+    --color-primary-hover: #334155; /* Slate 700 */
+    --color-accent: #2563eb; /* Blue 600 - Anodized blue accent */
+    --color-accent-hover: #1d4ed8; /* Blue 700 */
     
     /* UI Elements */
-    --color-border: #e5e7eb; /* Gray 200 */
-    --color-ring: rgba(219, 39, 119, 0.3);
+    --color-border: #e2e8f0; /* Slate 200 */
+    --color-border-focus: #93c5fd; /* Blue 300 */
+    --color-ring: rgba(37, 99, 235, 0.25);
+    --color-error: #ef4444; /* Red 500 */
 
     /* Typography */
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      /* Color Palette - Dark Mode (Night Garden Theme) */
-      --color-bg: #0f172a; /* Slate 900 */
-      --color-surface: #1e293b; /* Slate 800 */
-      --color-text: #f8fafc; /* Slate 50 */
-      --color-text-muted: #94a3b8; /* Slate 400 */
+      /* Color Palette - Dark Mode (Deep Blacks & Titanium) */
+      --color-bg: #020617; /* Slate 950 - Deep Black */
+      --color-surface: #0f172a; /* Slate 900 - Elevated surface */
+      --color-text: #f8fafc; /* Slate 50 - Crisp white text */
+      --color-text-muted: #94a3b8; /* Slate 400 - Muted text */
       
       /* Brand Colors */
-      --color-primary: #f472b6; /* Pink 400 */
-      --color-primary-hover: #ec4899; /* Pink 500 */
-      --color-secondary: #064e3b; /* Emerald 900 */
-      --color-secondary-dark: #34d399; /* Emerald 400 */
-      --color-accent: #a78bfa; /* Violet 400 */
+      --color-primary: #f8fafc; /* Slate 50 - White buttons in dark mode */
+      --color-primary-hover: #e2e8f0; /* Slate 200 */
+      --color-accent: #3b82f6; /* Blue 500 - Bright anodized blue */
+      --color-accent-hover: #60a5fa; /* Blue 400 */
       
       /* UI Elements */
-      --color-border: #334155; /* Slate 700 */
-      --color-ring: rgba(244, 114, 182, 0.3);
+      --color-border: #1e293b; /* Slate 800 */
+      --color-border-focus: #3b82f6; /* Blue 500 */
+      --color-ring: rgba(59, 130, 246, 0.25);
+      --color-error: #f87171; /* Red 400 */
     }
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
-    font-family: var(--font-body);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer components {
-  /* Reusable component classes using our design tokens */
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-medium transition-all duration-300 ease-in-out shadow-sm hover:shadow-md focus:outline-none focus:ring-4;
-    background-color: var(--color-primary);
-    color: #ffffff;
+  /* Glassmorphism Navigation */
+  .glass-nav {
+    @apply sticky top-0 z-50 backdrop-blur-xl transition-colors duration-300 border-b;
+    background-color: rgba(var(--color-bg-rgb, 255, 255, 255), 0.7);
+    border-color: var(--color-border);
   }
-  
-  .btn-primary:hover {
+
+  @media (prefers-color-scheme: dark) {
+    .glass-nav {
+      background-color: rgba(2, 6, 23, 0.7); /* Slate 950 with opacity */
+    }
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: var(--color-primary);
+    color: var(--color-bg); /* Inverse text color for high contrast */
+  }
+
+  .btn-primary:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
     transform: translateY(-1px);
   }
 
-  .btn-primary:focus {
-    --tw-ring-color: var(--color-ring);
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium text-white transition-all duration-300 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: var(--color-accent);
   }
 
-  .card {
-    @apply rounded-2xl overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl;
+  .btn-accent:hover:not(:disabled) {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px 0 var(--color-ring);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full border text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-4;
+    background-color: transparent;
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-text);
+  }
+
+  /* Product Cards */
+  .product-card {
+    @apply relative flex flex-col rounded-3xl p-6 transition-all duration-500 overflow-hidden group cursor-pointer;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
   }
 
-  .card:hover {
+  .product-card:hover {
     transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
   }
 
+  @media (prefers-color-scheme: dark) {
+    .product-card:hover {
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  /* Badges */
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-    background-color: var(--color-secondary);
-    color: var(--color-secondary-dark);
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
   }
 
-  .section-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24;
+  .badge-accent {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white;
+    background-color: var(--color-accent);
   }
 }
 
 @layer utilities {
-  /* Custom utilities for specific text colors if needed outside of standard tailwind */
-  .text-primary {
-    color: var(--color-primary);
+  /* Text Gradients for Premium Feel */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400;
   }
   
-  .text-muted {
-    color: var(--color-text-muted);
+  .text-gradient-accent {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-300;
   }
 
-  .bg-surface {
-    background-color: var(--color-surface);
+  /* Hide Scrollbar but keep functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

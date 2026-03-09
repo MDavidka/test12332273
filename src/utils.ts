@@ -1,143 +1,154 @@
-import { Flower, SiteConfig } from './types';
+import type { CartItem } from './types';
 
 /**
- * Global site configuration
+ * Formats a numeric value into a localized currency string.
+ * 
+ * @param amount - The numeric amount to format
+ * @param currency - The ISO 4217 currency code (default: 'USD')
+ * @param locale - The locale string (default: 'en-US')
+ * @returns A formatted currency string (e.g., "$999.00")
  */
-export const siteConfig: SiteConfig = {
-  title: 'Botanica',
-  description: 'Fedezd fel a természet legszebb virágait és ismerd meg gondozásuk titkait.',
-  navItems: [
-    { label: 'Kezdőlap', href: '#home' },
-    { label: 'Katalógus', href: '#catalog' },
-    { label: 'Gondozási Tippek', href: '#care' },
-  ],
-};
-
-/**
- * Mocked database of flowers
- */
-export const flowers: Flower[] = [
-  {
-    id: 'f1',
-    name: 'Rózsa',
-    scientificName: 'Rosa',
-    description: 'A kertek királynője, amely számtalan színben és formában pompázik. Illata és eleganciája miatt évszázadok óta a legnépszerűbb dísznövény.',
-    imageUrl: 'https://images.unsplash.com/photo-1496062031456-07b8f162a322?auto=format&fit=crop&q=80&w=800',
-    properties: {
-      bloomingSeason: 'Nyár',
-      lightRequirement: 'Teljes napfény',
-      waterRequirement: 'Közepes',
-      difficulty: 'Középhaladó',
-      symbolism: 'Szerelem, Szenvedély',
-    },
-  },
-  {
-    id: 'f2',
-    name: 'Tulipán',
-    scientificName: 'Tulipa',
-    description: 'A tavasz egyik legkorábbi és legszínpompásabb hírnöke. Egyszerű, mégis elegáns formája minden kertet felvidít.',
-    imageUrl: 'https://images.unsplash.com/photo-1520764836489-443b54f59c0a?auto=format&fit=crop&q=80&w=800',
-    properties: {
-      bloomingSeason: 'Tavasz',
-      lightRequirement: 'Teljes napfény',
-      waterRequirement: 'Közepes',
-      difficulty: 'Kezdő',
-      symbolism: 'Tökéletes szerelem',
-    },
-  },
-  {
-    id: 'f3',
-    name: 'Napraforgó',
-    scientificName: 'Helianthus annuus',
-    description: 'Hatalmas, sárga virágzataival a nyár esszenciáját hozza el. Különlegessége, hogy virágai mindig a nap felé fordulnak.',
-    imageUrl: 'https://images.unsplash.com/photo-1551893665-f843f600794e?auto=format&fit=crop&q=80&w=800',
-    properties: {
-      bloomingSeason: 'Nyár',
-      lightRequirement: 'Teljes napfény',
-      waterRequirement: 'Közepes',
-      difficulty: 'Kezdő',
-      symbolism: 'Imádat, Hűség',
-    },
-  },
-  {
-    id: 'f4',
-    name: 'Orchidea',
-    scientificName: 'Phalaenopsis',
-    description: 'Egzotikus és lenyűgöző szobanövény, amely hosszan tartó virágzásával hálálja meg a gondoskodást. Különleges mikroklímát igényel.',
-    imageUrl: 'https://images.unsplash.com/photo-1512722016694-2255830f1e4b?auto=format&fit=crop&q=80&w=800',
-    properties: {
-      bloomingSeason: 'Egész évben',
-      lightRequirement: 'Félárnyék',
-      waterRequirement: 'Alacsony',
-      difficulty: 'Haladó',
-      symbolism: 'Kifinomultság, Szépség',
-    },
-  },
-  {
-    id: 'f5',
-    name: 'Levendula',
-    scientificName: 'Lavandula',
-    description: 'Jellegzetes illatú, lila virágú gyógynövény és dísznövény. Kiválóan bírja a szárazságot és vonzza a beporzó rovarokat.',
-    imageUrl: 'https://images.unsplash.com/photo-1498579809087-ef1e558fd1da?auto=format&fit=crop&q=80&w=800',
-    properties: {
-      bloomingSeason: 'Nyár',
-      lightRequirement: 'Teljes napfény',
-      waterRequirement: 'Alacsony',
-      difficulty: 'Kezdő',
-      symbolism: 'Nyugalom, Tisztaság',
-    },
-  },
-  {
-    id: 'f6',
-    name: 'Liliom',
-    scientificName: 'Lilium',
-    description: 'Fenséges megjelenésű, gyakran bódító illatú hagymás növény. Nagy, tölcsér alakú virágai a kertek igazi ékkövei.',
-    imageUrl: 'https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&q=80&w=800',
-    properties: {
-      bloomingSeason: 'Nyár',
-      lightRequirement: 'Félárnyék',
-      waterRequirement: 'Közepes',
-      difficulty: 'Középhaladó',
-      symbolism: 'Tisztaság, Újjászületés',
-    },
-  }
-];
-
-/**
- * Utility function to get Tailwind color classes based on difficulty level
- * @param difficulty The difficulty level string
- * @returns Tailwind CSS classes for background and text color
- */
-export function getDifficultyBadgeClasses(difficulty: string): string {
-  switch (difficulty.toLowerCase()) {
-    case 'kezdő':
-      return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300';
-    case 'középhaladó':
-      return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300';
-    case 'haladó':
-      return 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300';
-    default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
-  }
+export function formatCurrency(amount: number, currency: string = 'USD', locale: string = 'en-US'): string {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0, // Don't show .00 for whole numbers if preferred, but standard is 2
+    maximumFractionDigits: 2,
+  }).format(amount);
 }
 
 /**
- * Utility function to safely create a DOM element with classes
- * @param tag HTML tag name
- * @param classNames Array of CSS classes or a single string
- * @returns The created HTMLElement
+ * Calculates the total price of items in a shopping cart.
+ * Assumes CartItem has `price` and `quantity` properties.
+ * 
+ * @param items - Array of cart items
+ * @returns The total cost
+ */
+export function calculateCartTotal(items: CartItem[]): number {
+  if (!Array.isArray(items)) return 0;
+  return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+}
+
+/**
+ * Calculates a discounted price based on a percentage.
+ * 
+ * @param originalPrice - The base price
+ * @param discountPercentage - The percentage to discount (0-100)
+ * @returns The new discounted price
+ */
+export function calculateDiscount(originalPrice: number, discountPercentage: number): number {
+  if (discountPercentage < 0 || discountPercentage > 100) return originalPrice;
+  return originalPrice - (originalPrice * (discountPercentage / 100));
+}
+
+/**
+ * Utility for conditionally joining Tailwind CSS classes.
+ * Filters out falsy values and normalizes whitespace.
+ * 
+ * @param classes - An array of class strings or falsy values
+ * @returns A clean, space-separated string of classes
+ */
+export function cn(...classes: (string | undefined | null | false)[]): string {
+  return classes
+    .filter(Boolean)
+    .join(' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+/**
+ * A lightweight Vanilla JS DOM element creator.
+ * Simplifies building complex DOM structures without a framework.
+ * 
+ * @param tag - The HTML tag name to create
+ * @param attributes - An object of HTML attributes or event listeners (e.g., onClick)
+ * @param children - Child elements or text nodes to append
+ * @returns The constructed HTMLElement
  */
 export function createElement<K extends keyof HTMLElementTagNameMap>(
   tag: K,
-  classNames?: string | string[]
+  attributes: Record<string, string | boolean | EventListener> = {},
+  ...children: (HTMLElement | string | undefined | null)[]
 ): HTMLElementTagNameMap[K] {
-  const el = document.createElement(tag);
-  if (classNames) {
-    if (Array.isArray(classNames)) {
-      el.classList.add(...classNames.filter(Boolean));
-    } else {
-      el.className = classNames;
+  const element = document.createElement(tag);
+
+  for (const [key, value] of Object.entries(attributes)) {
+    if (key.startsWith('on') && typeof value === 'function') {
+      // Handle event listeners (e.g., onClick -> click)
+      const eventName = key.toLowerCase().substring(2);
+      element.addEventListener(eventName, value as EventListener);
+    } else if (typeof value === 'boolean') {
+      // Handle boolean attributes (e.g., disabled, checked)
+      if (value) element.setAttribute(key, '');
+    } else if (value !== undefined && value !== null) {
+      // Handle standard string attributes
+      if (key === 'className') {
+        element.setAttribute('class', String(value));
+      } else {
+        element.setAttribute(key, String(value));
+      }
     }
   }
-  return el;
+
+  for (const child of children) {
+    if (!child) continue;
+    if (typeof child === 'string') {
+      element.appendChild(document.createTextNode(child));
+    } else {
+      element.appendChild(child);
+    }
+  }
+
+  return element;
+}
+
+/**
+ * Safe LocalStorage wrapper with JSON parsing and fallback values.
+ */
+export const storage = {
+  /**
+   * Retrieves and parses a value from localStorage.
+   * @param key - The storage key
+   * @param fallback - The default value if the key doesn't exist or parsing fails
+   */
+  get<T>(key: string, fallback: T): T {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : fallback;
+    } catch (error) {
+      console.warn(`Error reading ${key} from localStorage`, error);
+      return fallback;
+    }
+  },
+  
+  /**
+   * Stringifies and saves a value to localStorage.
+   * @param key - The storage key
+   * @param value - The value to store
+   */
+  set<T>(key: string, value: T): void {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.warn(`Error writing ${key} to localStorage`, error);
+    }
+  }
+};
+
+/**
+ * Debounces a function call, ensuring it only runs after a specified delay
+ * of inactivity. Useful for window resize or scroll events.
+ * 
+ * @param func - The function to debounce
+ * @param wait - The delay in milliseconds
+ */
+export function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  
+  return function(...args: Parameters<T>) {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
 }

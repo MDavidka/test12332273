@@ -1,13 +1,16 @@
 {
-  "name": "flower-catalog",
+  "name": "modern-phone-brand",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "check": "tsc --noEmit",
     "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide": "^0.378.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

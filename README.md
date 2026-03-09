@@ -1,84 +1,108 @@
-# 🌸 Virág Katalógus (Flower Catalog)
+# Nexus Mobile - Premium E-Commerce Storefront
 
-A modern, responsive, and visually appealing web catalog showcasing various flowers and their botanical properties. Built with **Vite**, **Vanilla TypeScript**, and **Tailwind CSS**.
+A high-performance, minimalist e-commerce frontend for a premium smartphone brand. Built with **Vite**, **Vanilla TypeScript**, and **Tailwind CSS**, designed for maximum speed and a sleek user experience.
+
+## 🚀 Tech Stack
+
+*   **Framework:** [Vite](https://vitejs.dev/) (Vanilla TS)
+*   **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/) (Utility-first, Custom Design Tokens)
+*   **Deployment:** Optimized for [Cloudflare Pages](https://pages.cloudflare.com/)
 
 ## ✨ Features
 
-*   🌺 **Beautiful UI:** Nature-inspired design system with a cohesive color palette.
-*   🌓 **Dark Mode Support:** Automatically adapts to the user's system preferences (Light/Dark mode).
-*   📱 **Fully Responsive:** Mobile-first approach ensuring a seamless experience across all devices.
-*   ⚡ **High Performance:** Built with Vanilla TypeScript and Vite for lightning-fast Hot Module Replacement (HMR) and highly optimized production builds.
-*   🔍 **Detailed Botanical Data:** Displays blooming seasons, light/water requirements, difficulty levels, and symbolism for each flower.
+*   **Immersive Hero Section:** High-impact product showcase with smooth animations.
+*   **Dynamic Product Grid:** Responsive layout displaying available phone models, colors, and pricing.
+*   **Technical Specifications:** Clean, readable breakdown of device features (camera, battery, processor).
+*   **Interactive Cart Modal:** Slide-out shopping cart for seamless user flow and simulated checkout.
+*   **Dark Mode Ready:** Built-in CSS variables supporting system-level dark/light mode preferences.
+*   **Fully Responsive:** Mobile-first design ensuring perfect rendering across all device sizes.
 
-## 🛠️ Tech Stack
-
-*   **Framework:** [Vite](https://vitejs.dev/)
-*   **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict typing)
-*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-*   **Architecture:** Component-based Vanilla DOM manipulation
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Ensure you have [Node.js](https://nodejs.org/) (v18 or newer) installed on your machine.
-
-### Installation
-
-1. Clone the repository (or download the source code).
-2. Navigate to the project directory:
-   ```bash
-   cd flower-catalog
-   ```
-3. Install the dependencies:
-   ```bash
-   npm install
-   ```
-
-### Development Server
-
-Start the Vite development server with Hot Module Replacement (HMR):
-
-```bash
-npm run dev
-```
-
-Open your browser and navigate to `http://localhost:5173`.
-
-## 📜 Available Scripts
-
-*   `npm run dev` - Starts the development server.
-*   `npm run build` - Compiles TypeScript and builds the project for production into the `dist/` directory.
-*   `npm run preview` - Boots up a local static web server to preview the production build.
-*   `npm run check` - Runs TypeScript type checking without emitting files.
-
-## 📂 Project Structure
+## 📦 Project Structure
 
 ```text
-flower-catalog/
-├── index.html          # Main HTML entry point
-├── package.json        # Project metadata and scripts
-├── tsconfig.json       # TypeScript configuration
-├── vite.config.ts      # Vite bundler configuration
+project/
+├── index.html              # Main HTML entry point
+├── package.json            # Project metadata and scripts
+├── tsconfig.json           # TypeScript compiler configuration
+├── vite.config.ts          # Vite bundler configuration
 ├── src/
-│   ├── main.ts         # Application entry point (orchestrates components)
-│   ├── types.ts        # Shared TypeScript interfaces (Flower, SiteConfig, etc.)
-│   ├── utils.ts        # Helper functions and mock data
-│   ├── style.css       # Global styles and Tailwind directives
-│   └── components/     # Reusable UI components
-│       ├── header.ts
-│       ├── hero.ts
-│       ├── flower-catalog.ts
-│       ├── flower-card.ts
-│       └── footer.ts
+│   ├── main.ts             # Application entry point (orchestrator)
+│   ├── types.ts            # Shared TypeScript interfaces (PhoneProduct, CartItem, etc.)
+│   ├── utils.ts            # Helper functions (currency formatting, DOM utilities)
+│   ├── style.css           # Global Tailwind styles and CSS custom properties
+│   └── components/         # Modular UI components
+│       ├── header.ts       # Navigation and cart trigger
+│       ├── hero.ts         # Landing page showcase
+│       ├── featureSpecs.ts # Technical details section
+│       ├── productGrid.ts  # Storefront inventory display
+│       ├── cartModal.ts    # Slide-out shopping cart
+│       └── footer.ts       # Site footer
 ```
 
-## ☁️ Deployment
+## 🛠️ Local Development
 
-This project is optimized for static hosting platforms like **Cloudflare Pages**, Vercel, or Netlify. 
+### Prerequisites
+*   [Node.js](https://nodejs.org/) (v18 or higher recommended)
+*   npm, yarn, or pnpm
 
-To deploy to Cloudflare Pages:
-1. Connect your GitHub/GitLab repository to Cloudflare Pages.
-2. Set the build command to: `npm run build`
-3. Set the build output directory to: `dist`
-4. Save and deploy!
+### Setup Instructions
+
+1.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+2.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    The site will be available at `http://localhost:5173`.
+
+3.  **Type Checking:**
+    To run TypeScript compiler checks without emitting files:
+    ```bash
+    npm run check
+    ```
+
+4.  **Build for Production:**
+    ```bash
+    npm run build
+    ```
+    This will generate optimized static assets in the `dist/` directory.
+
+5.  **Preview Production Build:**
+    ```bash
+    npm run preview
+    ```
+
+## ☁️ Deployment to Cloudflare Pages
+
+This project is pre-configured for seamless deployment to Cloudflare Pages.
+
+### Option 1: GitHub/GitLab Integration (Recommended)
+1. Push this repository to GitHub or GitLab.
+2. Log in to the [Cloudflare Dashboard](https://dash.cloudflare.com/).
+3. Navigate to **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**.
+4. Select your repository and configure the build settings:
+   *   **Framework preset:** `None`
+   *   **Build command:** `npm run build`
+   *   **Build output directory:** `dist`
+5. Click **Save and Deploy**.
+
+*Note: It is recommended to add an environment variable `NODE_VERSION` set to `18` or higher in your Cloudflare Pages settings to ensure compatibility with Vite.*
+
+### Option 2: Direct Upload (Wrangler CLI)
+If you prefer to deploy via CLI:
+1. Build the project locally:
+   ```bash
+   npm run build
+   ```
+2. Deploy the `dist` folder using Wrangler:
+   ```bash
+   npx wrangler pages deploy dist
+   ```
+
+## 📄 License
+
+This project is proprietary and created for demonstration purposes.

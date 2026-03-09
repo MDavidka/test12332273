@@ -1,21 +1,56 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <!-- Simple inline SVG favicon for a floral theme -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>" />
+    <!-- A simple SVG favicon for the phone brand -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📱</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Virág Katalógus | Fedezd fel a természet szépségét</title>
-    <meta name="description" content="Böngéssz gondosan összeállított gyűjteményünkben. Ismerd meg a legkülönlegesebb virágokat, és találd meg a tökéletes növényt otthonodba vagy kertedbe." />
     
-    <!-- Tailwind CSS CDN for rapid styling as per project requirements -->
+    <!-- SEO & Meta Tags -->
+    <title>Aura | Next-Gen Smartphones</title>
+    <meta name="description" content="Discover the future of mobile technology with Aura smartphones. Experience unparalleled performance, stunning design, and pro-grade cameras." />
+    <meta name="theme-color" content="#111827" />
+    
+    <!-- Preconnect for Google Fonts (Inter is used in style.css) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Tailwind CSS CDN (Required for runtime utility classes) -->
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
-    <!-- The root element where the Vite + TypeScript application will be mounted -->
-    <div id="app"></div>
     
-    <!-- Main entry point for the application -->
+    <!-- Tailwind Configuration for CDN to recognize custom colors from style.css -->
+    <script>
+      tailwind.config = {
+        darkMode: 'media',
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--color-primary)',
+              'primary-hover': 'var(--color-primary-hover)',
+              secondary: 'var(--color-secondary)',
+              accent: 'var(--color-accent)',
+              bg: 'var(--color-bg)',
+              surface: 'var(--color-surface)',
+              text: 'var(--color-text)',
+              'text-muted': 'var(--color-text-muted)',
+              border: 'var(--color-border)',
+              'border-focus': 'var(--color-border-focus)',
+              error: 'var(--color-error)',
+            },
+            fontFamily: {
+              body: ['var(--font-body)'],
+              heading: ['var(--font-heading)'],
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body class="antialiased min-h-screen flex flex-col selection:bg-primary selection:text-white overflow-x-hidden">
+    <!-- Main Application Mount Point -->
+    <div id="app" class="flex flex-col min-h-screen w-full relative"></div>
+    
+    <!-- Vite Entry Point -->
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
