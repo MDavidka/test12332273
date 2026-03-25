@@ -1,230 +1,268 @@
 import './style.css';
-import type { AppState, ViewState, ComponentProps } from './types';
-import { subscribeToAuthChanges } from './firebase';
-import { createElement, clearContainer } from './utils';
-
-// Import Components
-import { renderHeader } from './components/header';
+import { renderNavbar } from './components/navbar';
+import { renderHero } from './components/hero';
+import { renderProductSegments } from './components/product-segments';
+import { renderCartDrawer } from './components/cart-drawer';
+import { renderCheckoutModal } from './components/checkout-modal';
 import { renderFooter } from './components/footer';
-import { renderWelcome } from './components/welcome';
-import { renderLogin } from './components/login';
+import { account, ID } from './appwrite';
 
 /**
- * Global Application State
+ * Main application initialization.
+ * Sets up the DOM structure and mounts all UI components.
  */
-const state: AppState = {
-  user: null,
-  currentView: 'welcome'
-};
-
-// Layout Containers
-let headerContainer: HTMLElement | null = null;
-let mainContainer: HTMLElement | null = null;
-let footerContainer: HTMLElement | null = null;
-
-/**
- * Initializes the application, sets up the DOM structure,
- * and subscribes to authentication changes.
- */
-export function init(): void {
-  const appRoot = document.getElementById('app');
-  if (!appRoot) {
+function setupApp() {
+  const app = document.getElementById('app');
+  
+  if (!app) {
     console.error('Critical Error: Root element #app not found in index.html');
     return;
   }
 
-  // Apply global layout styles to the root
-  appRoot.className = 'min-h-screen flex flex-col bg-slate-900 text-slate-50 font-sans selection:bg-cyan-500/30';
-
-  // Create persistent layout containers
-  headerContainer = createElement('div', { className: 'w-full sticky top-0 z-50' });
-  mainContainer = createElement('main', { className: 'w-full flex-grow flex flex-col relative' });
-  footerContainer = createElement('div', { className: 'w-full mt-auto' });
-
-  // Mount containers to root
-  appRoot.appendChild(headerContainer);
-  appRoot.appendChild(mainContainer);
-  appRoot.appendChild(footerContainer);
-
-  // Initial Render
-  renderAppHeader();
-  renderAppFooter();
-  renderCurrentView();
-
-  // Subscribe to Firebase Authentication State
-  subscribeToAuthChanges((user) => {
-    state.user = user;
-    
-    // Handle automatic routing based on auth state
-    if (!user && state.currentView === 'dashboard') {
-      // Kicked out of protected route
-      state.currentView = 'welcome';
-    } else if (user && state.currentView === 'login') {
-      // Successfully logged in
-      state.currentView = 'dashboard';
-    }
-
-    // Re-render UI to reflect new auth state
-    renderAppHeader();
-    renderCurrentView();
-  });
-}
-
-/**
- * Handles view navigation and enforces route protection.
- * 
- * @param newView The target view to navigate to.
- */
-function handleViewChange(newView: ViewState): void {
-  // Route Protection: Prevent access to dashboard if not logged in
-  if (newView === 'dashboard' && !state.user) {
-    state.currentView = 'login';
-  } else {
-    state.currentView = newView;
-  }
-
-  // Scroll to top on view change
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  renderCurrentView();
-  renderAppHeader(); // Re-render header to update active navigation states
-}
-
-/**
- * Renders the global Header component.
- */
-function renderAppHeader(): void {
-  if (!headerContainer) return;
-  renderHeader({
-    container: headerContainer,
-    state,
-    onViewChange: handleViewChange
-  });
-}
-
-/**
- * Renders the global Footer component.
- */
-function renderAppFooter(): void {
-  if (!footerContainer) return;
-  renderFooter({
-    container: footerContainer,
-    state,
-    onViewChange: handleViewChange
-  });
-}
-
-/**
- * Renders the main content area based on the current view state.
- */
-function renderCurrentView(): void {
-  if (!mainContainer) return;
-
-  const props: ComponentProps = {
-    container: mainContainer,
-    state,
-    onViewChange: handleViewChange
-  };
-
-  switch (state.currentView) {
-    case 'welcome':
-      renderWelcome(props);
-      break;
-    case 'login':
-      // Redirect to dashboard if already authenticated
-      if (state.user) {
-        handleViewChange('dashboard');
-        return;
-      }
-      renderLogin(props);
-      break;
-    case 'dashboard':
-      // Double-check protection
-      if (!state.user) {
-        handleViewChange('login');
-        return;
-      }
-      renderDashboard(props);
-      break;
-    default:
-      renderWelcome(props);
-  }
-}
-
-/**
- * Renders the Dashboard view (Protected Route).
- * Note: Implemented inline here as a simple placeholder for the gated content.
- * 
- * @param props Component initialization properties.
- */
-function renderDashboard({ container, state }: ComponentProps): void {
-  if (!container) return;
-  clearContainer(container);
-
-  const wrapper = createElement('div', {
-    className: 'container mx-auto px-4 py-16 md:py-24 max-w-5xl animate-fade-in flex flex-col items-center text-center'
-  });
-
-  // Dashboard Header
-  const badge = createElement('div', {
-    className: 'inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-mono font-medium mb-6',
-    text: 'Secure Connection Established'
-  });
-
-  const title = createElement('h2', {
-    className: 'text-3xl md:text-5xl font-bold text-slate-50 mb-4',
-    text: 'Client Dashboard'
-  });
-
-  const welcomeMsg = createElement('p', {
-    className: 'text-lg text-slate-400 mb-12',
-    text: `Welcome back, ${state?.user?.email || 'Client'}.`
-  });
-
-  // Dashboard Content Card
-  const card = createElement('div', {
-    className: 'glass-card w-full max-w-3xl p-8 md:p-12 relative overflow-hidden'
-  });
-
-  const glow = createElement('div', {
-    className: 'absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-md h-64 bg-emerald-500/5 blur-3xl rounded-full pointer-events-none'
-  });
-
-  const cardIcon = createElement('div', {
-    className: 'w-16 h-16 mx-auto bg-slate-800/50 rounded-2xl flex items-center justify-center mb-6 border border-slate-700/50'
-  });
-  cardIcon.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-emerald-400">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-    </svg>
+  // 1. Create the global layout structure
+  app.innerHTML = `
+    <div class="min-h-screen flex flex-col relative bg-[var(--color-bg)] text-[var(--color-text)] font-sans selection:bg-[var(--color-primary)] selection:text-white">
+      
+      <!-- Header / Navigation -->
+      <div id="nav-container"></div>
+      
+      <!-- Main Content Area -->
+      <main id="main-content" class="flex-grow flex flex-col">
+        <div id="hero-container"></div>
+        <div id="products-container"></div>
+      </main>
+      
+      <!-- Footer -->
+      <div id="footer-container"></div>
+      
+      <!-- Portals / Overlays -->
+      <div id="cart-container"></div>
+      <div id="checkout-container"></div>
+      <div id="auth-modal-container"></div>
+      
+    </div>
   `;
 
-  const cardTitle = createElement('h3', {
-    className: 'text-xl font-semibold text-slate-200 mb-3 relative z-10',
-    text: 'Private Workspace'
+  // 2. Get references to the container elements
+  const navContainer = document.getElementById('nav-container')!;
+  const heroContainer = document.getElementById('hero-container')!;
+  const productsContainer = document.getElementById('products-container')!;
+  const cartContainer = document.getElementById('cart-container')!;
+  const checkoutContainer = document.getElementById('checkout-container')!;
+  const footerContainer = document.getElementById('footer-container')!;
+  const authModalContainer = document.getElementById('auth-modal-container')!;
+
+  // 3. Initialize and mount all UI Components
+  renderNavbar(navContainer);
+  renderHero(heroContainer);
+  renderProductSegments(productsContainer);
+  renderCartDrawer(cartContainer);
+  renderCheckoutModal(checkoutContainer);
+  renderFooter(footerContainer);
+
+  // 4. Initialize the Authentication Modal (Inline Component)
+  initAuthModal(authModalContainer);
+
+  // 5. Global Event Listeners for cross-component communication
+  window.addEventListener('NAVIGATE_TO', ((e: CustomEvent<string>) => {
+    const targetId = e.detail;
+    const element = document.getElementById(targetId);
+    if (element) {
+      // Smooth scroll to the requested section with a slight offset for the sticky header
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+  
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }) as EventListener);
+}
+
+/**
+ * Initializes the Authentication Modal.
+ * Handles user login and registration via Appwrite.
+ * 
+ * @param container The DOM element to mount the auth modal into.
+ */
+function initAuthModal(container: HTMLElement) {
+  // Component State
+  let isOpen = false;
+  let isLoginMode = true;
+  let isLoading = false;
+  let errorMessage = '';
+
+  /**
+   * Renders the modal UI based on current state.
+   */
+  const render = () => {
+    if (!isOpen) {
+      container.innerHTML = '';
+      document.body.style.overflow = '';
+      return;
+    }
+
+    // Prevent background scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+
+    container.innerHTML = `
+      <div class="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" id="auth-backdrop" aria-hidden="true"></div>
+        
+        <!-- Modal Panel -->
+        <div class="relative w-full max-w-md bg-[var(--color-surface)] rounded-2xl shadow-2xl overflow-hidden border border-[var(--color-border)] transform transition-all animate-in fade-in zoom-in-95 duration-200">
+          
+          <!-- Header -->
+          <div class="px-6 py-4 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-bg)]">
+            <h3 class="text-lg font-bold text-[var(--color-text)]" id="modal-title">
+              ${isLoginMode ? 'Welcome Back' : 'Create an Account'}
+            </h3>
+            <button type="button" id="btn-close-auth" class="text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors p-1.5 rounded-full hover:bg-[var(--color-border)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+              <span class="sr-only">Close</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="p-6 sm:p-8">
+            
+            <!-- Error Message -->
+            ${errorMessage ? `
+              <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl flex items-start shadow-sm">
+                <svg class="w-5 h-5 mr-2.5 flex-shrink-0 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="font-medium">${errorMessage}</span>
+              </div>
+            ` : ''}
+
+            <!-- Auth Form -->
+            <form id="auth-form" class="space-y-5">
+              ${!isLoginMode ? `
+                <div>
+                  <label for="auth-name" class="block text-sm font-medium text-[var(--color-text-muted)] mb-1.5">Full Name</label>
+                  <input type="text" id="auth-name" name="name" required class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-[var(--color-text)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-20 outline-none transition-all placeholder-gray-400" placeholder="John Doe">
+                </div>
+              ` : ''}
+              
+              <div>
+                <label for="auth-email" class="block text-sm font-medium text-[var(--color-text-muted)] mb-1.5">Email Address</label>
+                <input type="email" id="auth-email" name="email" required class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-[var(--color-text)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-20 outline-none transition-all placeholder-gray-400" placeholder="you@example.com">
+              </div>
+              
+              <div>
+                <label for="auth-password" class="block text-sm font-medium text-[var(--color-text-muted)] mb-1.5">Password</label>
+                <input type="password" id="auth-password" name="password" required minlength="8" class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-[var(--color-text)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-20 outline-none transition-all placeholder-gray-400" placeholder="••••••••">
+                ${!isLoginMode ? `<p class="mt-1.5 text-xs text-[var(--color-text-muted)]">Must be at least 8 characters long.</p>` : ''}
+              </div>
+
+              <button type="submit" class="w-full mt-8 rounded-xl bg-[var(--color-primary)] px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-[var(--color-primary-hover)] hover:shadow-lg transform hover:-translate-y-0.5 transition-all flex items-center justify-center disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed" ${isLoading ? 'disabled' : ''}>
+                ${isLoading 
+                  ? `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...` 
+                  : isLoginMode ? 'Sign In' : 'Create Account'
+                }
+              </button>
+            </form>
+
+            <!-- Toggle Mode -->
+            <div class="mt-8 pt-6 border-t border-[var(--color-border)] text-center text-sm text-[var(--color-text-muted)]">
+              ${isLoginMode ? "Don't have an account?" : "Already have an account?"}
+              <button type="button" id="btn-toggle-mode" class="font-semibold text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] ml-1 transition-colors focus:outline-none focus:underline">
+                ${isLoginMode ? 'Sign up' : 'Log in'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    attachEvents();
+  };
+
+  /**
+   * Attaches event listeners to the modal elements.
+   */
+  const attachEvents = () => {
+    if (!isOpen) return;
+
+    // Close Modal Triggers
+    document.getElementById('btn-close-auth')?.addEventListener('click', () => {
+      isOpen = false;
+      render();
+    });
+
+    document.getElementById('auth-backdrop')?.addEventListener('click', () => {
+      isOpen = false;
+      render();
+    });
+
+    // Toggle Login/Register Mode
+    document.getElementById('btn-toggle-mode')?.addEventListener('click', () => {
+      isLoginMode = !isLoginMode;
+      errorMessage = '';
+      render();
+    });
+
+    // Form Submission (Appwrite Integration)
+    const form = document.getElementById('auth-form') as HTMLFormElement;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      isLoading = true;
+      errorMessage = '';
+      render();
+
+      const email = (document.getElementById('auth-email') as HTMLInputElement).value;
+      const password = (document.getElementById('auth-password') as HTMLInputElement).value;
+      const nameInput = document.getElementById('auth-name') as HTMLInputElement | null;
+
+      try {
+        if (isLoginMode) {
+          // Login
+          await account.createEmailPasswordSession(email, password);
+        } else {
+          // Register
+          const name = nameInput?.value || 'User';
+          await account.create(ID.unique(), email, password, name);
+          // Automatically log in after successful registration
+          await account.createEmailPasswordSession(email, password);
+        }
+        
+        // Success: Close modal and notify other components (like Navbar)
+        isOpen = false;
+        window.dispatchEvent(new CustomEvent('USER_LOGGED_IN'));
+        
+      } catch (error: any) {
+        console.error('Authentication error:', error);
+        // Provide user-friendly error messages based on Appwrite response
+        if (error.code === 401) {
+          errorMessage = 'Invalid email or password. Please try again.';
+        } else if (error.code === 409) {
+          errorMessage = 'An account with this email already exists.';
+        } else {
+          errorMessage = error.message || 'Authentication failed. Please try again.';
+        }
+      } finally {
+        isLoading = false;
+        render();
+      }
+    });
+  };
+
+  // Listen for the global event to open the modal
+  window.addEventListener('OPEN_AUTH_MODAL', () => {
+    isOpen = true;
+    isLoginMode = true; // Default to login view
+    errorMessage = '';
+    render();
   });
-
-  const cardText = createElement('p', {
-    className: 'text-slate-400 relative z-10 max-w-lg mx-auto',
-    text: 'This area is restricted to authenticated clients. In a full production environment, this dashboard would contain project files, interactive prototypes, and direct communication channels.'
-  });
-
-  card.appendChild(glow);
-  card.appendChild(cardIcon);
-  card.appendChild(cardTitle);
-  card.appendChild(cardText);
-
-  wrapper.appendChild(badge);
-  wrapper.appendChild(title);
-  wrapper.appendChild(welcomeMsg);
-  wrapper.appendChild(card);
-
-  container.appendChild(wrapper);
 }
 
 // Bootstrap the application once the DOM is fully loaded
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', setupApp);
 } else {
-  init();
+  setupApp();
 }
