@@ -5,12 +5,19 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
   },
   server: {
     port: 3000,
     open: true,
+    host: true,
   },
   preview: {
-    port: 3000,
-  }
+    port: 8080,
+    open: true,
+  },
 });

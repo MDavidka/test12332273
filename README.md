@@ -1,28 +1,28 @@
-# TechStore | Modern Phone E-Commerce
+# 🌿 Botanica | Modern Plant Catalog
 
-A high-performance, modern e-commerce platform for selling mobile phones and accessories. Built with a focus on speed, clean UI/UX, and seamless user flows.
+A beautiful, high-performance static website for showcasing and selling indoor plants. Built with a focus on clean, earthy aesthetics, responsive design, and lightning-fast load times.
+
+This project is designed as a **static catalog** (no database required), making it incredibly easy to host, maintain, and deploy.
 
 ## 🚀 Tech Stack
 
 *   **Frontend Framework:** Vite + Vanilla TypeScript
 *   **Styling:** Tailwind CSS (Utility-first, Mobile-first)
-*   **Backend / BaaS:** Appwrite (Authentication, Databases)
-*   **Deployment:** Cloudflare Pages
+*   **Data Management:** Static JSON/Array (No backend required)
+*   **Deployment:** Cloudflare Pages (Recommended)
 
 ## ✨ Features
 
-*   **Modern UI/UX:** Sleek, Apple/Samsung-inspired design system with glassmorphism and smooth animations.
-*   **Product Segments:** Categorized product listings (Premium Flagships, Budget Friendly, New Arrivals, Accessories).
-*   **User Authentication:** Secure login and registration via Appwrite.
-*   **Shopping Cart:** Persistent sliding cart drawer.
-*   **Checkout Flow:** Streamlined checkout modal with real-time total calculation.
-*   **Discount System:** Apply promotional codes for percentage-based discounts.
+*   **Earthy Design System:** Calming sage and forest greens with terracotta accents.
+*   **Responsive Grid:** Beautifully displays plant photography on mobile, tablet, and desktop.
+*   **Static Catalog:** Easily manage your inventory directly in the code without needing a complex database or CMS.
+*   **High Performance:** Zero backend latency, optimized assets via Vite.
 
 ---
 
 ## 🛠️ Local Development Setup
 
-1. **Clone the repository** (if applicable) or download the source code.
+1. **Clone the repository** or download the source code.
 2. **Install dependencies:**
    ```bash
    npm install
@@ -35,101 +35,49 @@ A high-performance, modern e-commerce platform for selling mobile phones and acc
    ```bash
    npm run build
    ```
+5. **Preview the production build locally:**
+   ```bash
+   npm run preview
+   ```
 
 ---
 
-## 🗄️ Appwrite Backend Setup (CRITICAL)
+## 🪴 Managing Plant Inventory
 
-This project relies on **Appwrite** for its backend. The frontend is already configured to connect to your specific Appwrite instance:
-*   **Endpoint:** `https://fra.cloud.appwrite.io/v1`
-*   **Project ID:** `69c2b4a10015a5c19a9f`
+Since this project does not use a database, all plant data is stored statically in the code. 
 
-To make the store functional, you **must** create the following Database and Collections in your Appwrite Console.
+To add, edit, or remove plants from your store:
+1. Open the `src/utils.ts` file.
+2. Locate the `PLANTS_DATA` array.
+3. Modify the objects in the array. Each object follows this structure:
 
-### 1. Create the Database
-*   Navigate to **Databases** in your Appwrite Console.
-*   Click **Create Database**.
-*   Name it `Main Store` (or similar).
-*   Set the **Database ID** to: `main`
-
-### 2. Create the Collections
-
-Inside the `main` database, create the following three collections. **The Collection IDs and Attribute keys must match exactly.**
-
-#### Collection 1: Products
-*   **Name:** Products
-*   **Collection ID:** `products`
-*   **Permissions:** Go to Settings -> Permissions. Add `Any` and check **Read**.
-*   **Attributes:**
-    *   `name` (String, size: 255, Required)
-    *   `brand` (String, size: 100, Required)
-    *   `price` (Double, Required)
-    *   `description` (String, size: 5000, Required)
-    *   `imageUrl` (URL, Required)
-    *   `category` (String, size: 100, Required)
-    *   `stock` (Integer, Required)
-    *   `features` (String, size: 255, Array: Yes, Not Required)
-
-#### Collection 2: Orders
-*   **Name:** Orders
-*   **Collection ID:** `orders`
-*   **Permissions:** Go to Settings -> Permissions. Add `Users` and check **Create** and **Read**.
-*   **Attributes:**
-    *   `userId` (String, size: 255, Required)
-    *   `items` (String, size: 10000, Required) - *Stores JSON stringified cart data*
-    *   `totalAmount` (Double, Required)
-    *   `discountCode` (String, size: 50, Not Required)
-    *   `status` (String, size: 50, Required) - *e.g., 'pending', 'processing'*
-    *   `shippingAddress` (String, size: 1000, Required)
-
-#### Collection 3: Discounts
-*   **Name:** Discounts
-*   **Collection ID:** `discounts`
-*   **Permissions:** Go to Settings -> Permissions. Add `Any` and check **Read**.
-*   **Attributes:**
-    *   `code` (String, size: 50, Required)
-    *   `discountPercentage` (Double, Required) - *e.g., 15 for 15% off*
-    *   `isActive` (Boolean, Required)
-
-### 3. Add Sample Data
-To see products on the frontend, add a few documents to the `products` collection in your Appwrite console. 
-Example Product Document:
-```json
+```typescript
 {
-  "name": "iPhone 15 Pro",
-  "brand": "Apple",
-  "price": 999.00,
-  "description": "Titanium design. A17 Pro chip. Action button.",
-  "imageUrl": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=800",
-  "category": "Premium Flagships",
-  "stock": 50,
-  "features": ["5G", "120Hz Display", "Titanium"]
+  id: 'unique-id',
+  name: 'Plant Name',
+  scientificName: 'Scientific Name',
+  price: 25.99,
+  image: 'URL_to_image',
+  category: 'Indoor',
+  careLevel: 'Easy',
+  description: 'A brief description of the plant.'
 }
 ```
-
-To test the discount system, add a document to the `discounts` collection:
-```json
-{
-  "code": "WELCOME10",
-  "discountPercentage": 10,
-  "isActive": true
-}
-```
+*Note: The website will automatically update the gallery grid based on the contents of this array.*
 
 ---
 
-## 🌐 Deployment
+## 🌐 Deployment (Cloudflare Pages)
 
-This project is optimized for deployment on **Cloudflare Pages**.
+This project is optimized for free, fast deployment on **Cloudflare Pages**.
 
-1. Push your code to a GitHub/GitLab repository.
-2. Log in to the Cloudflare Dashboard and navigate to **Pages**.
-3. Click **Create a project** -> **Connect to Git**.
-4. Select your repository.
-5. Configure the build settings:
+1. Push your code to a GitHub or GitLab repository.
+2. Log in to the [Cloudflare Dashboard](https://dash.cloudflare.com/) and navigate to **Workers & Pages** -> **Pages**.
+3. Click **Connect to Git** and select your repository.
+4. Configure the build settings:
    *   **Framework preset:** Vite
    *   **Build command:** `npm run build`
    *   **Build output directory:** `dist`
-6. Click **Save and Deploy**.
+5. Click **Save and Deploy**.
 
-Your modern phone store will be live globally in minutes!
+Your plant catalog will be live globally in minutes!

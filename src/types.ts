@@ -1,78 +1,42 @@
 /**
- * Base interface for Appwrite documents
+ * Plant Category Types
  */
-export interface AppwriteDocument {
-  $id: string;
-  $createdAt: string;
-  $updatedAt: string;
-  $permissions?: string[];
-  $databaseId?: string;
-  $collectionId?: string;
-}
+export type PlantCategory = 'Indoor' | 'Outdoor' | 'Succulents' | 'Pet Friendly' | 'Rare';
 
 /**
- * Product Interface representing a phone or accessory
+ * Plant Care Level Types
  */
-export interface Product extends AppwriteDocument {
+export type CareLevel = 'Easy' | 'Medium' | 'Expert';
+
+/**
+ * Plant Interface representing a single plant product in the catalog
+ */
+export interface Plant {
+  id: string;
   name: string;
-  brand: string;
+  scientificName?: string;
   price: number;
-  description: string;
   imageUrl: string;
-  category: 'Premium Flagships' | 'Budget Friendly' | 'New Arrivals' | 'Accessories';
-  stock: number;
-  features?: string[]; // Array of feature strings (e.g., ["5G", "120Hz Display"])
+  category: PlantCategory;
+  careLevel: CareLevel;
+  description: string;
+  isFeatured?: boolean;
+  isSoldOut?: boolean;
+  lightRequirement?: string;
+  waterRequirement?: string;
 }
 
 /**
- * User Interface representing an authenticated customer
+ * Navigation Item Interface for header and footer links
  */
-export interface User {
-  $id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  emailVerification: boolean;
-  phoneVerification: boolean;
-  prefs?: Record<string, any>;
+export interface NavItem {
+  label: string;
+  href: string;
+  isButton?: boolean;
 }
 
 /**
- * Cart Item Interface
- */
-export interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
-/**
- * Order Status Type
- */
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-
-/**
- * Order Interface representing a completed checkout
- */
-export interface Order extends AppwriteDocument {
-  userId: string;
-  items: string; // JSON stringified array of CartItem (simplifies Appwrite storage)
-  totalAmount: number;
-  discountCode?: string;
-  status: OrderStatus;
-  shippingAddress: string;
-}
-
-/**
- * Discount Interface for promotional codes
- */
-export interface Discount extends AppwriteDocument {
-  code: string;
-  discountPercentage: number; // e.g., 15 for 15% off
-  isActive: boolean;
-}
-
-/**
- * Generic Component Props Interface
+ * Generic Component Props Interface for rendering UI blocks
  */
 export interface ComponentProps {
   container: HTMLElement;
@@ -87,24 +51,20 @@ export interface SiteConfig {
   description: string;
   currency: string;
   currencySymbol: string;
+  contactEmail: string;
+  socialLinks?: {
+    instagram?: string;
+    facebook?: string;
+    twitter?: string;
+  };
 }
 
 /**
- * Navigation Item Interface
+ * Store Feature Interface for the benefits/features section
  */
-export interface NavItem {
-  label: string;
-  href: string;
-  isButton?: boolean;
-}
-
-/**
- * Global Application State
- */
-export interface AppState {
-  user: User | null;
-  cart: CartItem[];
-  isCartOpen: boolean;
-  isCheckoutOpen: boolean;
-  isAuthModalOpen: boolean;
+export interface StoreFeature {
+  id: string;
+  title: string;
+  description: string;
+  iconName: string; // Represents the name of the Lucide icon to render
 }

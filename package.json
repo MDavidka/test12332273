@@ -1,5 +1,5 @@
 {
-  "name": "modern-phone-store",
+  "name": "plant-store-static",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -10,7 +10,6 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "appwrite": "^16.0.0",
     "lucide": "^0.344.0"
   },
   "devDependencies": {
