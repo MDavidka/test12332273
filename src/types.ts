@@ -1,70 +1,41 @@
-/**
- * Plant Category Types
- */
-export type PlantCategory = 'Indoor' | 'Outdoor' | 'Succulents' | 'Pet Friendly' | 'Rare';
+export type CareLevel = 'Easy' | 'Moderate' | 'Advanced';
 
-/**
- * Plant Care Level Types
- */
-export type CareLevel = 'Easy' | 'Medium' | 'Expert';
+export type LightRequirement = 'Low Light' | 'Bright Indirect' | 'Direct Sun';
 
-/**
- * Plant Interface representing a single plant product in the catalog
- */
 export interface Plant {
   id: string;
   name: string;
   scientificName?: string;
   price: number;
   imageUrl: string;
-  category: PlantCategory;
   careLevel: CareLevel;
+  lightRequirement: LightRequirement;
   description: string;
   isFeatured?: boolean;
-  isSoldOut?: boolean;
-  lightRequirement?: string;
-  waterRequirement?: string;
 }
 
-/**
- * Navigation Item Interface for header and footer links
- */
-export interface NavItem {
-  label: string;
-  href: string;
-  isButton?: boolean;
-}
-
-/**
- * Generic Component Props Interface for rendering UI blocks
- */
-export interface ComponentProps {
-  container: HTMLElement;
-  [key: string]: any;
-}
-
-/**
- * Global Site Configuration
- */
 export interface SiteConfig {
-  name: string;
-  description: string;
-  currency: string;
-  currencySymbol: string;
-  contactEmail: string;
-  socialLinks?: {
+  storeName: string;
+  tagline: string;
+  email: string;
+  phone: string;
+  address: string;
+  hours: {
+    weekdays: string;
+    weekends: string;
+  };
+  socialLinks: {
     instagram?: string;
     facebook?: string;
     twitter?: string;
   };
 }
 
-/**
- * Store Feature Interface for the benefits/features section
- */
-export interface StoreFeature {
-  id: string;
-  title: string;
-  description: string;
-  iconName: string; // Represents the name of the Lucide icon to render
+export interface NavItem {
+  label: string;
+  href: string;
+}
+
+export interface ComponentProps {
+  container: HTMLElement;
 }

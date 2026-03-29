@@ -1,117 +1,140 @@
-import { Plant } from './types';
+import { Plant, SiteConfig, NavItem, CareLevel } from './types';
 
 /**
- * Formats a number into a localized currency string.
- * 
- * @param amount - The numeric amount to format
- * @param currency - The currency code (default: 'USD')
- * @param locale - The locale string (default: 'en-US')
- * @returns The formatted currency string
+ * Global Site Configuration
  */
-export function formatCurrency(amount: number, currency: string = 'USD', locale: string = 'en-US'): string {
-  return new Intl.NumberFormat(locale, {
+export const siteConfig: SiteConfig = {
+  storeName: 'Verdant Haven',
+  tagline: 'Bring nature indoors with our curated collection of house plants.',
+  email: 'hello@verdanthaven.com',
+  phone: '(555) 123-4567',
+  address: '123 Botanical Way, Portland, OR 97204',
+  hours: {
+    weekdays: '10:00 AM - 7:00 PM',
+    weekends: '11:00 AM - 5:00 PM'
+  },
+  socialLinks: {
+    instagram: 'https://instagram.com',
+    facebook: 'https://facebook.com',
+    twitter: 'https://twitter.com'
+  }
+};
+
+/**
+ * Main Navigation Items
+ */
+export const navItems: NavItem[] = [
+  { label: 'Shop Plants', href: '#catalog' },
+  { label: 'Why Us', href: '#features' },
+  { label: 'Contact', href: '#footer' }
+];
+
+/**
+ * Static Plant Catalog Inventory
+ */
+export const plants: Plant[] = [
+  {
+    id: 'p1',
+    name: 'Monstera Deliciosa',
+    scientificName: 'Monstera deliciosa',
+    price: 45.00,
+    imageUrl: 'https://images.unsplash.com/photo-1614594975525-e45190c55d40?auto=format&fit=crop&q=80&w=800',
+    careLevel: 'Moderate',
+    lightRequirement: 'Bright Indirect',
+    description: 'Famous for its natural leaf holes, the Swiss Cheese Plant is a stunning statement piece for any bright room.',
+    isFeatured: true
+  },
+  {
+    id: 'p2',
+    name: 'Snake Plant',
+    scientificName: 'Sansevieria trifasciata',
+    price: 28.00,
+    imageUrl: 'https://images.unsplash.com/photo-1593482892290-f54927ae1b7e?auto=format&fit=crop&q=80&w=800',
+    careLevel: 'Easy',
+    lightRequirement: 'Low Light',
+    description: 'Virtually indestructible. Perfect for beginners and known for its excellent air-purifying qualities.',
+    isFeatured: true
+  },
+  {
+    id: 'p3',
+    name: 'Fiddle Leaf Fig',
+    scientificName: 'Ficus lyrata',
+    price: 65.00,
+    imageUrl: 'https://images.unsplash.com/photo-1597055958656-2b11b05a8d1d?auto=format&fit=crop&q=80&w=800',
+    careLevel: 'Advanced',
+    lightRequirement: 'Bright Indirect',
+    description: 'A popular indoor tree with large, violin-shaped leaves. Requires consistent care and stable environments.',
+    isFeatured: false
+  },
+  {
+    id: 'p4',
+    name: 'ZZ Plant',
+    scientificName: 'Zamioculcas zamiifolia',
+    price: 32.00,
+    imageUrl: 'https://images.unsplash.com/photo-1632207691143-643e2a9a9361?auto=format&fit=crop&q=80&w=800',
+    careLevel: 'Easy',
+    lightRequirement: 'Low Light',
+    description: 'With its wide, dark green leaves, the ZZ plant is highly tolerant of neglect and low light conditions.',
+    isFeatured: true
+  },
+  {
+    id: 'p5',
+    name: 'Golden Pothos',
+    scientificName: 'Epipremnum aureum',
+    price: 22.00,
+    imageUrl: 'https://images.unsplash.com/photo-1604762524889-3e2fcc145683?auto=format&fit=crop&q=80&w=800',
+    careLevel: 'Easy',
+    lightRequirement: 'Bright Indirect',
+    description: 'A fast-growing trailing vine that is incredibly easy to care for. Looks beautiful in hanging baskets.',
+    isFeatured: false
+  },
+  {
+    id: 'p6',
+    name: 'Peace Lily',
+    scientificName: 'Spathiphyllum',
+    price: 38.00,
+    imageUrl: 'https://images.unsplash.com/photo-1593696954577-ab3d39317b97?auto=format&fit=crop&q=80&w=800',
+    careLevel: 'Moderate',
+    lightRequirement: 'Low Light',
+    description: 'Features elegant white blooms and dark green foliage. It will dramatically droop to tell you when it needs water.',
+    isFeatured: false
+  }
+];
+
+/**
+ * Utility: Format a number as USD currency
+ */
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    currency: 'USD'
   }).format(amount);
 }
 
 /**
- * Utility function to conditionally join CSS class names together.
- * Useful for Tailwind CSS dynamic classes.
- * 
- * @param classes - An array of class names or falsy values
- * @returns A space-separated string of valid class names
+ * Utility: Get Tailwind classes for care level badges
  */
-export function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ');
+export function getCareLevelBadgeClasses(level: CareLevel): string {
+  switch (level) {
+    case 'Easy':
+      return 'bg-secondary/20 text-primary-light';
+    case 'Moderate':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'Advanced':
+      return 'bg-accent/20 text-accent-hover';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
 }
 
 /**
- * Static mock data for the plant catalog.
- * Since this project does not require a database, this array serves as the 
- * primary source of truth for the products displayed on the website.
+ * Utility: Safely escape HTML to prevent XSS when rendering strings
  */
-export const PLANTS: Plant[] = [
-  {
-    id: 'plt-001',
-    name: 'Monstera Deliciosa',
-    price: 45.00,
-    imageUrl: 'https://images.unsplash.com/photo-1614594975525-e45190c55d40?auto=format&fit=crop&q=80&w=800',
-    category: 'Indoor',
-    careLevel: 'Easy',
-    description: 'Famous for its natural leaf holes, the Monstera is a vibrant, easy-care statement plant that brings a tropical feel to any space.',
-    isPopular: true
-  },
-  {
-    id: 'plt-002',
-    name: 'Fiddle Leaf Fig',
-    price: 65.00,
-    imageUrl: 'https://images.unsplash.com/photo-1597055905081-8b9fcce0e422?auto=format&fit=crop&q=80&w=800',
-    category: 'Indoor',
-    careLevel: 'Medium',
-    description: 'Features large, heavily veined, violin-shaped leaves that grow upright on a tall plant. A favorite among interior designers.',
-    isPopular: true
-  },
-  {
-    id: 'plt-003',
-    name: 'Snake Plant',
-    price: 30.00,
-    imageUrl: 'https://images.unsplash.com/photo-1593482892290-f54927ae1b7e?auto=format&fit=crop&q=80&w=800',
-    category: 'Low Light',
-    careLevel: 'Easy',
-    description: 'One of the most tolerant plants out there. It can survive low light levels, drought, and generally being ignored.',
-    isPopular: false
-  },
-  {
-    id: 'plt-004',
-    name: 'ZZ Plant',
-    price: 35.00,
-    imageUrl: 'https://images.unsplash.com/photo-1632207691143-643e2a9a9361?auto=format&fit=crop&q=80&w=800',
-    category: 'Low Light',
-    careLevel: 'Easy',
-    description: 'Characterized by its thick, waxy, green leaves. It is a great air purifier and highly resilient to varying conditions.',
-    isPopular: true
-  },
-  {
-    id: 'plt-005',
-    name: 'Golden Pothos',
-    price: 25.00,
-    imageUrl: 'https://images.unsplash.com/photo-1604762524889-3e2fcc145683?auto=format&fit=crop&q=80&w=800',
-    category: 'Trailing',
-    careLevel: 'Easy',
-    description: 'An easy-care trailing plant that can grow in a variety of lighting conditions. Perfect for hanging baskets or high shelves.',
-    isPopular: false
-  },
-  {
-    id: 'plt-006',
-    name: 'Bird of Paradise',
-    price: 85.00,
-    imageUrl: 'https://images.unsplash.com/photo-1613739118925-cde1e8f5d65b?auto=format&fit=crop&q=80&w=800',
-    category: 'Large',
-    careLevel: 'Medium',
-    description: 'A stunning tropical plant with large, glossy leaves that bring a lush, jungle vibe to any bright room.',
-    isPopular: true
-  },
-  {
-    id: 'plt-007',
-    name: 'Peace Lily',
-    price: 28.00,
-    imageUrl: 'https://images.unsplash.com/photo-1593691509543-c55fb32e7355?auto=format&fit=crop&q=80&w=800',
-    category: 'Flowering',
-    careLevel: 'Easy',
-    description: 'Known for its beautiful white blooms and excellent air-purifying qualities. Thrives in medium to low light.',
-    isPopular: false
-  },
-  {
-    id: 'plt-008',
-    name: 'Rubber Plant',
-    price: 40.00,
-    imageUrl: 'https://images.unsplash.com/photo-1600411833196-7c1f6b1a8b90?auto=format&fit=crop&q=80&w=800',
-    category: 'Indoor',
-    careLevel: 'Medium',
-    description: 'Features striking, glossy burgundy leaves. A robust houseplant that can grow quite large with proper care.',
-    isPopular: false
-  }
-];
+export function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}

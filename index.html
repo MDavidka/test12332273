@@ -2,22 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Dynamic SVG Favicon matching the earthy green brand color -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232f5233' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11 20A7 7 0 0 1 4 13c0-3.5 3-7 8-11 5 4 8 7.5 8 11a7 7 0 0 1-7 7v4'/><path d='M11 20v-6'/></svg>" />
+    <!-- Simple SVG Favicon for the Plant Store -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Botanica | Bring Nature Indoors</title>
-    <meta name="description" content="Discover our curated collection of beautiful, healthy indoor plants. Bring nature into your home with Botanica's premium plant catalog." />
     
-    <!-- Google Fonts: Inter for clean, modern typography -->
+    <title>Botanica | Your Local Indoor Plant Shop</title>
+    <meta name="description" content="Discover our curated collection of healthy, beautiful indoor plants. Expert care advice, sustainable practices, and local delivery available." />
+    
+    <!-- Preconnect to Google Fonts (Fonts are imported in src/style.css) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN (Included as requested for rapid prototyping, though Vite + PostCSS will also process style.css) -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <!-- Root element for the Vite application -->
+    <!-- 
+      The Vite app shell. 
+      src/main.ts will inject the Header, Hero, Catalog, Features, and Footer components here. 
+    -->
     <div id="app"></div>
     
     <!-- Main Application Entry Point -->

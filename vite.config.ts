@@ -4,20 +4,13 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: undefined,
-      },
-    },
+    sourcemap: true
   },
   server: {
-    port: 3000,
     open: true,
-    host: true,
+    port: 3000
   },
   preview: {
-    port: 8080,
-    open: true,
-  },
+    port: 8080
+  }
 });

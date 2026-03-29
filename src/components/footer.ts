@@ -1,115 +1,152 @@
+import { siteConfig, navItems } from '../utils';
+
 export function renderFooter(container: HTMLElement): void {
-  const footer = document.createElement('footer');
-  // Using a dark earthy tone for the footer background, assuming secondary is Forest Green
-  footer.className = 'bg-stone-900 text-stone-300 pt-16 pb-8 border-t border-stone-800';
+  const currentYear = new Date().getFullYear();
 
-  footer.innerHTML = `
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-        
-        <!-- Brand & About -->
-        <div class="space-y-4">
-          <h3 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500">
-              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-            </svg>
-            Verdant
-          </h3>
-          <p class="text-sm leading-relaxed text-stone-400">
-            Bringing nature indoors. We provide high-quality, sustainably sourced plants to help you create your perfect green sanctuary.
+  // Generate Quick Links from navItems
+  const quickLinksHTML = navItems.map(item => `
+    <li>
+      <a href="${item.href}" class="text-secondary hover:text-white transition-colors duration-300 text-sm font-body flex items-center gap-2 group">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+        ${item.label}
+      </a>
+    </li>
+  `).join('');
+
+  const footerHTML = `
+    <footer class="bg-primary pt-16 pb-8 relative overflow-hidden" id="footer">
+      <!-- Decorative Background Elements -->
+      <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary/30 to-transparent"></div>
+      <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-primary-light/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute top-12 -left-12 w-64 h-64 bg-secondary/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
+          
+          <!-- Brand & About -->
+          <div class="lg:pr-8">
+            <a href="#" class="inline-flex items-center gap-2 mb-6 group">
+              <svg class="w-8 h-8 text-secondary group-hover:text-accent transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+              </svg>
+              <span class="font-heading font-bold text-2xl text-white tracking-tight">
+                ${siteConfig.storeName}
+              </span>
+            </a>
+            <p class="text-secondary font-body text-sm leading-relaxed mb-6">
+              ${siteConfig.tagline} We are dedicated to helping you build your indoor jungle with healthy, beautiful plants and expert advice.
+            </p>
+            <!-- Social Icons -->
+            <div class="flex items-center gap-4">
+              <a href="#" class="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center text-secondary hover:bg-accent hover:text-white transition-all duration-300" aria-label="Instagram">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                </svg>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center text-secondary hover:bg-accent hover:text-white transition-all duration-300" aria-label="Facebook">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h3 class="font-heading text-lg font-bold text-white mb-6">Quick Links</h3>
+            <ul class="space-y-4">
+              ${quickLinksHTML}
+              <li>
+                <a href="#" class="text-secondary hover:text-white transition-colors duration-300 text-sm font-body flex items-center gap-2 group">
+                  <span class="w-1.5 h-1.5 rounded-full bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  Shipping & Returns
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-secondary hover:text-white transition-colors duration-300 text-sm font-body flex items-center gap-2 group">
+                  <span class="w-1.5 h-1.5 rounded-full bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  FAQ
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact & Location -->
+          <div>
+            <h3 class="font-heading text-lg font-bold text-white mb-6">Visit Us</h3>
+            <ul class="space-y-4 text-sm font-body text-secondary">
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span>
+                  123 Botanical Way<br />
+                  Green District<br />
+                  Portland, OR 97204
+                </span>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                <a href="mailto:hello@${siteConfig.storeName.toLowerCase().replace(/\s+/g, '')}.com" class="hover:text-white transition-colors duration-300">
+                  hello@${siteConfig.storeName.toLowerCase().replace(/\s+/g, '')}.com
+                </a>
+              </li>
+              <li class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                </svg>
+                <a href="tel:+15551234567" class="hover:text-white transition-colors duration-300">
+                  (555) 123-4567
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Store Hours -->
+          <div>
+            <h3 class="font-heading text-lg font-bold text-white mb-6">Store Hours</h3>
+            <ul class="space-y-3 text-sm font-body text-secondary">
+              <li class="flex justify-between items-center pb-2 border-b border-primary-light/50">
+                <span>Monday - Friday</span>
+                <span class="text-white font-medium">10:00 AM - 7:00 PM</span>
+              </li>
+              <li class="flex justify-between items-center pb-2 border-b border-primary-light/50">
+                <span>Saturday</span>
+                <span class="text-white font-medium">9:00 AM - 6:00 PM</span>
+              </li>
+              <li class="flex justify-between items-center pb-2 border-b border-primary-light/50">
+                <span>Sunday</span>
+                <span class="text-white font-medium">10:00 AM - 5:00 PM</span>
+              </li>
+            </ul>
+            <div class="mt-6 p-4 bg-primary-light/30 rounded-lg border border-primary-light/50 flex items-start gap-3">
+              <svg class="w-5 h-5 text-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <p class="text-xs text-secondary leading-relaxed">
+                Holiday hours may vary. Please check our social media for the most up-to-date information.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="pt-8 border-t border-primary-light/50 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p class="text-secondary text-sm font-body text-center md:text-left">
+            &copy; ${currentYear} ${siteConfig.storeName}. All rights reserved.
           </p>
-        </div>
-
-        <!-- Quick Links -->
-        <div>
-          <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">Shop All Plants</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">Care Guides</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">Our Story</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">Journal & Tips</a></li>
-          </ul>
-        </div>
-
-        <!-- Customer Service -->
-        <div>
-          <h4 class="text-lg font-semibold text-white mb-4">Customer Service</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">Shipping & Returns</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">FAQ</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">Contact Us</a></li>
-            <li><a href="#" class="hover:text-emerald-400 transition-colors duration-200">Track Order</a></li>
-          </ul>
-        </div>
-
-        <!-- Newsletter -->
-        <div>
-          <h4 class="text-lg font-semibold text-white mb-4">Join Our Newsletter</h4>
-          <p class="text-sm text-stone-400 mb-4">
-            Get 10% off your first order and weekly plant care tips.
-          </p>
-          <form id="newsletter-form" class="flex flex-col sm:flex-row gap-2">
-            <input 
-              type="email" 
-              placeholder="Enter your email" 
-              required
-              class="bg-stone-800 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 border border-stone-700 w-full"
-            />
-            <button 
-              type="submit" 
-              class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-md transition-colors duration-200 font-medium whitespace-nowrap"
-            >
-              Subscribe
-            </button>
-          </form>
-          <p id="newsletter-message" class="text-xs text-emerald-400 mt-2 hidden">Thanks for subscribing!</p>
+          <div class="flex items-center gap-6 text-sm font-body text-secondary">
+            <a href="#" class="hover:text-white transition-colors duration-300">Privacy Policy</a>
+            <a href="#" class="hover:text-white transition-colors duration-300">Terms of Service</a>
+          </div>
         </div>
       </div>
-
-      <!-- Bottom Bar -->
-      <div class="pt-8 border-t border-stone-800 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p class="text-sm text-stone-500">
-          &copy; ${new Date().getFullYear()} Verdant Plant Shop. All rights reserved.
-        </p>
-        
-        <!-- Social Icons -->
-        <div class="flex space-x-4">
-          <a href="#" class="text-stone-400 hover:text-white transition-colors" aria-label="Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-          </a>
-          <a href="#" class="text-stone-400 hover:text-white transition-colors" aria-label="Facebook">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </a>
-          <a href="#" class="text-stone-400 hover:text-white transition-colors" aria-label="Twitter">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
+    </footer>
   `;
 
-  container.appendChild(footer);
-
-  // Add simple interactivity for the newsletter form
-  const form = footer.querySelector('#newsletter-form') as HTMLFormElement;
-  const message = footer.querySelector('#newsletter-message') as HTMLParagraphElement;
-
-  if (form && message) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
-      
-      if (emailInput && emailInput.value) {
-        // Simulate successful subscription
-        form.reset();
-        message.classList.remove('hidden');
-        
-        // Hide message after 3 seconds
-        setTimeout(() => {
-          message.classList.add('hidden');
-        }, 3000);
-      }
-    });
-  }
+  container.innerHTML = footerHTML;
 }

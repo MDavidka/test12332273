@@ -1,83 +1,75 @@
 import './style.css';
 import { renderHeader } from './components/header';
 import { renderHero } from './components/hero';
-import { renderPlantGallery } from './components/plant-gallery';
+import { renderCatalog } from './components/catalog';
 import { renderFeatures } from './components/features';
 import { renderFooter } from './components/footer';
 
 /**
- * Bootstraps the application by initializing all components
- * and mounting them to the root DOM element.
+ * Initializes the application by setting up the DOM structure
+ * and rendering all components in the correct order.
  */
-function bootstrap(): void {
-  // 1. Safely grab the root element
+export function initApp(): void {
   const app = document.getElementById('app');
+  
   if (!app) {
     console.error('Critical Error: Root element #app not found in the DOM.');
     return;
   }
 
-  // Optional: Add a base layout class to the app container to ensure footer sticks to bottom
-  app.className = 'min-h-screen flex flex-col bg-[var(--color-bg)] text-[var(--color-text)] font-sans';
-
-  // 2. Create isolated containers for each component to prevent innerHTML conflicts
-  
-  // Header
+  // Create semantic containers for our components to prevent innerHTML overwrites
   const headerContainer = document.createElement('div');
-  headerContainer.id = 'header-wrapper';
-  app.appendChild(headerContainer);
-
-  // Main Content
   const mainContainer = document.createElement('main');
-  mainContainer.id = 'main-content';
-  mainContainer.className = 'flex-grow flex flex-col';
-  app.appendChild(mainContainer);
-
-  // Main -> Hero
   const heroContainer = document.createElement('div');
-  heroContainer.id = 'hero-wrapper';
-  mainContainer.appendChild(heroContainer);
-
-  // Main -> Plant Gallery
-  const galleryContainer = document.createElement('div');
-  galleryContainer.id = 'gallery-wrapper';
-  mainContainer.appendChild(galleryContainer);
-
-  // Main -> Features
+  const catalogContainer = document.createElement('div');
   const featuresContainer = document.createElement('div');
-  featuresContainer.id = 'features-wrapper';
+  const footerContainer = document.createElement('div');
+
+  // Assemble the DOM structure
+  mainContainer.appendChild(heroContainer);
+  mainContainer.appendChild(catalogContainer);
   mainContainer.appendChild(featuresContainer);
 
-  // Footer
-  const footerContainer = document.createElement('div');
-  footerContainer.id = 'footer-wrapper';
-  footerContainer.className = 'mt-auto';
+  app.appendChild(headerContainer);
+  app.appendChild(mainContainer);
   app.appendChild(footerContainer);
 
-  // 3. Render all components into their respective containers
-  try {
-    renderHeader(headerContainer);
-    renderHero(heroContainer);
-    renderPlantGallery(galleryContainer);
-    renderFeatures(featuresContainer);
-    renderFooter(footerContainer);
-  } catch (error) {
-    console.error('Error rendering components:', error);
-    // Fallback error state
-    app.innerHTML = `
-      <div class="min-h-screen flex items-center justify-center bg-[var(--color-bg)] text-[var(--color-text)]">
-        <div class="text-center p-8 bg-white rounded-2xl shadow-sm border border-red-100 max-w-md">
-          <svg class="w-12 h-12 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-          </svg>
-          <h1 class="text-xl font-bold text-stone-800 mb-2">Something went wrong</h1>
-          <p class="text-stone-600 text-sm">We couldn't load the store. Please refresh the page and try again.</p>
-        </div>
-      </div>
-    `;
-  }
+  // Render each component into its respective container
+  renderHeader(headerContainer);
+  renderHero(heroContainer);
+  renderCatalog(catalogContainer);
+  renderFeatures(featuresContainer);
+  renderFooter(footerContainer);
+
+  // Initialize smooth scrolling for anchor links
+  setupSmoothScrolling();
 }
 
-// Initialize the app once the script loads
-// (Since type="module" is used in index.html, the DOM is already parsed)
-bootstrap();
+/**
+ * Sets up smooth scrolling for all internal anchor links
+ */
+function setupSmoothScrolling(): void {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e: Event) {
+      e.preventDefault();
+      
+      const targetId = (this as HTMLAnchorElement).getAttribute('href');
+      if (!targetId || targetId === '#') return;
+
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+}
+
+// Safely execute the initialization when the DOM is fully loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
